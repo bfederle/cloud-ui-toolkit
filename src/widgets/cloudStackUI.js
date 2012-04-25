@@ -10,6 +10,10 @@
 
     navigation: function() {
       return $('<div>').attr('id', 'navigation');
+    },
+
+    mainArea: function() {
+      return $('<div>').attr('id', 'main-area');
     }
   };
   
@@ -19,11 +23,15 @@
       var $header = elems.header();
       var $logo = elems.logo();
       var $navigation = elems.navigation();
+      var $mainArea = elems.mainArea();
 
       $header.append($logo);
       $container.attr('cloudstack-container', true);
-      $container.append($header);
-      $container.append($navigation);
+      $container.append(
+        $header,
+        $navigation,
+        $mainArea
+      );
     }
   });    
 }(jQuery));
