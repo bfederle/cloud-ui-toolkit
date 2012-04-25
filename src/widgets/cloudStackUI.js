@@ -1,3 +1,7 @@
 (function($) {
-  // Code goes here
+  $.widget('cloudStackUI.cloudStackUI', {
+    _init: function() {
+      
+    }
+  });    
 }(jQuery));
