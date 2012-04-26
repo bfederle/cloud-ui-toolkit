@@ -17,7 +17,7 @@
     }
   };
   
-  $.widget('cloudStackUI.cloudStackUI', {
+  $.widget('cloudUI.cloudContainer', {
     _init: function() {
       var $container = this.element;
       var $header = elems.header();
@@ -26,7 +26,6 @@
       var $mainArea = elems.mainArea();
 
       $header.append($logo);
-      $container.attr('cloudstack-container', true);
       $container.append(
         $header,
         $navigation,

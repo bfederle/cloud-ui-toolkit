@@ -1,13 +1,12 @@
 (function($) {
-  module('CloudStack UI - Main widget');
+  module('Container');
 
   test('Basic', function() {
     var $ui = $('<div>').addClass('ui-container');
     var $header, $logo, $navigation, $mainArea;
     var ui = {};
 
-    ok($ui.cloudStackUI(ui), 'Initialize UI widget');
-    ok($ui.attr('cloudstack-container'), 'Container has cloudstack-container indicator');
+    ok($ui.cloudContainer(ui), 'Initialize UI widget');
 
     // Check layout
     $header = $ui.find('#header');
