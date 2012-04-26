@@ -68,4 +68,24 @@
     ok($navItems.filter(':last').hasClass('testSectionA'), 'Section A is last nav item');
     ok(!$navItems.filter('.doNotUse').size(), 'doNotUse section is hidden');
   });
+
+  test('Show section', function() {
+    var $ui = $('<div>').addClass('ui-container');
+    var ui = {
+      sections: {
+        testSectionA: {
+          title: 'testSectionATitle'
+        },
+        testSectionB: {
+          title: 'testSectionBTitle'
+        }
+      }
+    };
+    var $navItems;
+
+    $ui.cloudContainer(ui);
+    $navItems = $ui.find('#navigation ul li');
+    equal($navItems.filter('.active').size(), 1, 'One section is active');
+    ok($navItems.filter('.active').hasClass('testSectionA'), 'Section A active');
+  });
 }(jQuery));

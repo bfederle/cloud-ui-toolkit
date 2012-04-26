@@ -76,7 +76,29 @@
       $navigation.find('li:last').addClass('last');
 
       return $navigation;
+    },
+
+    makeActive: function(args) {
+      var sectionID = args.sectionID;
+      var $navigation = args.$navigation;
+      var $navItems = $navigation.find('li');
+      var $targetNavItem = $navItems.filter(function() {
+        return $(this).hasClass(sectionID);
+      });
+
+      $targetNavItem.addClass('active');
+      $targetNavItem.siblings().removeClass('active');
     }
+  };
+
+  var showSection = function(args) {
+    var $navigation = args.$navigation;
+    var sectionID = args.sectionID;
+
+    navigation.makeActive({
+      $navigation: $navigation,
+      sectionID: sectionID
+    });
   };
 
   var buildUI = function(args) {
@@ -87,7 +109,8 @@
     var $mainArea = elems.mainArea();
     var sections = args.sections;
     var sectionDisplay = args.sectionDisplay;
-    
+    var firstSection;
+
     $header.append($logo);
     $container.append(
       $header,
@@ -100,15 +123,27 @@
         $navigation: $navigation,
         sections: sections,
         sectionDisplay: sectionDisplay
-      });        
+      });
+
+      // Get first section
+      firstSection = sectionDisplay ?
+        sectionDisplay[0] :
+        $.map(sections, function(section, sectionID) {
+          return sectionID;
+        })[0];
+
+      showSection({
+        $navigation: $navigation,
+        sectionID: firstSection
+      });
     }
   };
-  
+
   $.widget('cloudUI.cloudContainer', {
     _init: function() {
       buildUI($.extend(this.options, {
         $container: this.element
       }));
     }
-  });    
+  });
 }(jQuery));
