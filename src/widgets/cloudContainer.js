@@ -53,14 +53,25 @@
     populate: function(args) {
       var $navigation = args.$navigation;
       var sections = args.sections;
+      var sectionOrder = args.sectionOrder ?
+            args.sectionOrder :
+            $.map(sections, function(section, sectionID) {
+              return sectionID;
+            });
 
-      $.each(sections, function(sectionID, section) {
-        var $navItem = navigation.addItem({
+      // Append sections to nav bar
+      $(sectionOrder).each(function() {
+        var sectionID = this.toString();
+        var section = sections[sectionID];
+
+        navigation.addItem({
           $navigation: $navigation,
           sectionID: sectionID,
           title: section.title
         });
       });
+
+      // First/last item labeling
       $navigation.find('li:first').addClass('first');
       $navigation.find('li:last').addClass('last');
 
@@ -77,6 +88,7 @@
       var $navigation = elems.navigation();
       var $mainArea = elems.mainArea();
       var sections = args.sections;
+      var sectionOrder = args.sectionOrder;
 
       $header.append($logo);
       $container.append(
@@ -88,7 +100,8 @@
       if (args.sections) {
         navigation.populate({
           $navigation: $navigation,
-          sections: sections
+          sections: sections,
+          sectionOrder: sectionOrder
         });        
       }
     }
