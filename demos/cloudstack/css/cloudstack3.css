@@ -1979,20 +1979,23 @@ div.detail-group.actions td {
   background-position: -351px -23px;
 }
 
-#navigation ul li.configuration span.icon {
-  background-position: -400px -24px;
-}
+#navigation ul li.configuration span.icon,
+#navigation ul li.serviceOfferings span.icon {
+ background-position: -400px -24px;
+ }
 
-#navigation ul li.global-settings span.icon {
-  background-image: url(../images/sprites.png);
-  background-position: -141px -241px;
-}
+#navigation ul li.global-settings span.icon,
+#navigation ul li.globalSettings span.icon {
+ background-image: url(../images/sprites.png);
+ background-position: -141px -241px;
+ }
 
 #navigation ul li.accounts span.icon {
   background-position: -458px -24px;
 }
 
-#navigation ul li.system span.icon {
+#navigation ul li.system span.icon,
+#navigation ul li.infrastructure span.icon {
   background-position: -565px -24px;
 }
 
