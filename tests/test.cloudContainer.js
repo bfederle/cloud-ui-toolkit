@@ -39,7 +39,9 @@
     $navItemB = $navItems.filter('.testSectionB');
     equal($navItems.size(), 2, 'Nav item present');
     equal($navItemA.find('span.title').html(), 'testSectionATitle', 'Section A has correct title');
+    equal($navItemA.attr('title'), 'testSectionATitle', 'Section A has tooltip');
     equal($navItemB.find('span.title').html(), 'testSectionBTitle', 'Section B has correct title');
+    equal($navItemB.attr('title'), 'testSectionBTitle', 'Section B has tooltip');
     ok($navItems.filter(':last').hasClass('last'), 'Last nav item has correct class');
     ok($navItems.filter(':first').hasClass('first'), 'First nav item has correct class');
   });

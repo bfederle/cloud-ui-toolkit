@@ -22,6 +22,7 @@
       var title = args.title;
 
       $title.html(title);
+      $navItem.attr('title', title);
       $navItem.addClass('navigation-item');
       $navItem.addClass(sectionID);
       $navItem.append($icon, $title);
