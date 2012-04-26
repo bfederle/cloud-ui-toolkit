@@ -144,6 +144,12 @@
       buildUI($.extend(this.options, {
         $container: this.element
       }));
+    },
+    showSection: function(sectionID) {
+      showSection({
+        $navigation: this.element.find('#navigation'),
+        sectionID: sectionID
+      });
     }
   });
 }(jQuery));
