@@ -43,7 +43,7 @@
     addItem: function(args) {
       var $container = args.$container;
       var $navigation = args.$navigation;
-      var $navItem;
+      var $navItem, $navItems;
       var sectionID = args.sectionID;
       var title = args.title;
 
@@ -54,37 +54,13 @@
       });
       $navItem.appendTo($navigation.find('ul'));
 
+      // Setup first/last item CSS styling
+      $navItems = $navigation.find('li');
+      $navItems.removeClass('first last');
+      $navItems.filter(':first').addClass('first');
+      $navItems.filter(':last').addClass('last');
+
       return $navItem;
-    },
-
-    populate: function(args) {
-      var $container = args.$container;
-      var $navigation = args.$navigation;
-      var sections = args.sections;
-      var sectionDisplay = args.sectionDisplay ?
-            args.sectionDisplay :
-            $.map(sections, function(section, sectionID) {
-              return sectionID;
-            });
-
-      // Append sections to nav bar
-      $(sectionDisplay).each(function() {
-        var sectionID = this.toString();
-        var section = sections[sectionID];
-
-        navigation.addItem({
-          $container: $container,
-          $navigation: $navigation,
-          sectionID: sectionID,
-          title: section.title
-        });
-      });
-
-      // First/last item labeling
-      $navigation.find('li:first').addClass('first');
-      $navigation.find('li:last').addClass('last');
-
-      return $navigation;
     },
 
     makeActive: function(args) {
@@ -110,6 +86,20 @@
     });
   };
 
+  var addSection = function(args) {
+    var $container = args.$container;
+    var $navigation = args.$navigation;
+    var sectionID = args.sectionID;
+    var section = args.section;
+
+    navigation.addItem({
+      $container: $container,
+      $navigation: $navigation,
+      sectionID: sectionID,
+      title: section.title
+    });
+  };
+
   var buildUI = function(args) {
     var $container = args.$container;
     var $header = elems.header();
@@ -117,8 +107,7 @@
     var $navigation = elems.navigation();
     var $mainArea = elems.mainArea();
     var sections = args.sections;
-    var sectionDisplay = args.sectionDisplay;
-    var firstSection;
+    var sectionDisplay, firstSection;
 
     $header.append($logo);
     $container.append(
@@ -128,19 +117,26 @@
     );
 
     if (args.sections) {
-      navigation.populate({
-        $container: $container,
-        $navigation: $navigation,
-        sections: sections,
-        sectionDisplay: sectionDisplay
+      sectionDisplay = args.sectionDisplay ?
+        args.sectionDisplay :
+        $.map(sections, function(section, sectionID) {
+          return sectionID;
+        });
+
+      $(sectionDisplay).each(function() {
+        var sectionID = this.toString();
+        var section = sections[sectionID];
+
+        addSection({
+          $container: $container,
+          $navigation: $navigation,
+          sectionID: sectionID,
+          section: section
+        });
       });
 
       // Get first section
-      firstSection = sectionDisplay ?
-        sectionDisplay[0] :
-        $.map(sections, function(section, sectionID) {
-          return sectionID;
-        })[0];
+      firstSection = sectionDisplay[0];
 
       showSection({
         $navigation: $navigation,
@@ -159,6 +155,17 @@
       showSection({
         $navigation: this.element.find('#navigation'),
         sectionID: sectionID
+      });
+    },
+    addSection: function(args) {
+      var sectionID = args.id;
+      var section = args.section;
+
+      addSection({
+        $container: this.element,
+        $navigation: this.element.find('#navigation'),
+        sectionID: sectionID,
+        section: section
       });
     }
   });

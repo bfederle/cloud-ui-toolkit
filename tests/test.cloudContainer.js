@@ -96,4 +96,33 @@
     equal($navItems.filter('.active').size(), 1, 'One section is active');
     ok($navItems.filter('.active').hasClass('testSectionA'), 'Section A active');
   });
+
+  test('Append new section', function() {
+    var $ui = $('<div>').addClass('ui-container');
+    var ui = {
+      sections: {
+        testSectionA: {
+          title: 'testSectionATitle'
+        },
+        testSectionB: {
+          title: 'testSectionBTitle'
+        }
+      }
+    };
+    var $navItems, $navItemC;
+
+    $ui.cloudContainer(ui);
+    $navItems = $ui.find('#navigation ul li');
+    ok($ui.cloudContainer('addSection', {
+      id: 'testSectionC',
+      section: {
+        title: 'testSectionCTitle'
+      }
+    }), 'Add new section');
+    $navItemC = $ui.find('#navigation ul li:last');
+    equal($ui.find('#navigation ul li').size(), 3, 'Correct # of nav items');
+    ok($navItemC.hasClass('testSectionC'), 'New section has correct CSS class');
+    equal($navItemC.find('span.title').html(), 'testSectionCTitle', 'New section has correct title');
+    equal($navItemC.attr('title'), 'testSectionCTitle', 'New section has tooltip');
+  });
 }(jQuery));
