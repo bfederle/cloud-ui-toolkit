@@ -1,4 +1,5 @@
 (function($) {
+  // UI elements
   var elems = {
     header: function() {
       return $('<div>').attr('id', 'header');
@@ -32,6 +33,7 @@
     }
   };
 
+  // Navigation bar-related functions
   var navigation = {
     addItem: function(args) {
       var $navigation = args.$navigation;
