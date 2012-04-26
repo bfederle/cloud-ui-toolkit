@@ -1,6 +1,20 @@
 (function($) {
   $(function() {
     var cloudStack = {
+      sectionDisplay: [
+        'dashboard',
+        'instances',
+        'storage',
+        'network',
+        'templates',
+        'events',
+        'accounts',
+        'domains',
+        'infrastructure',
+        'projects',
+        'globalSettings',
+        'serviceOfferings'
+      ],
       sections: {
         dashboard: {
           title: 'Dashboard'
@@ -32,11 +46,11 @@
         projects: {
           title: 'Projects'
         },
-        globalSettings: {
-          title: 'Global Settings'
-        },
         serviceOfferings: {
           title: 'Service Offerings'
+        },
+        globalSettings: {
+          title: 'Global Settings'
         }
       }
     };
