@@ -53,14 +53,14 @@
     populate: function(args) {
       var $navigation = args.$navigation;
       var sections = args.sections;
-      var sectionOrder = args.sectionOrder ?
-            args.sectionOrder :
+      var sectionDisplay = args.sectionDisplay ?
+            args.sectionDisplay :
             $.map(sections, function(section, sectionID) {
               return sectionID;
             });
 
       // Append sections to nav bar
-      $(sectionOrder).each(function() {
+      $(sectionDisplay).each(function() {
         var sectionID = this.toString();
         var section = sections[sectionID];
 
@@ -88,7 +88,7 @@
       var $navigation = elems.navigation();
       var $mainArea = elems.mainArea();
       var sections = args.sections;
-      var sectionOrder = args.sectionOrder;
+      var sectionDisplay = args.sectionDisplay;
 
       $header.append($logo);
       $container.append(
@@ -101,7 +101,7 @@
         navigation.populate({
           $navigation: $navigation,
           sections: sections,
-          sectionOrder: sectionOrder
+          sectionDisplay: sectionDisplay
         });        
       }
     }

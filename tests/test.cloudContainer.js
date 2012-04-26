@@ -44,16 +44,19 @@
     ok($navItems.filter(':first').hasClass('first'), 'First nav item has correct class');
   });
 
-  test('Control navigation item order', function() {
+  test('Control navigation item display', function() {
     var $ui = $('<div>');
     var ui = {
-      sectionOrder: ['testSectionB', 'testSectionA'],
+      sectionDisplay: ['testSectionB', 'testSectionA'],
       sections: {
         testSectionA: {
           title: 'testSectionATitle'
         },
         testSectionB: {
           title: 'testSectionBTitle'
+        },
+        doNotUse: {
+          title: 'Hide this section'
         }
       }
     };
@@ -63,5 +66,6 @@
     $navItems = $ui.find('#navigation ul li');
     ok($navItems.filter(':first').hasClass('testSectionB'), 'Section B is first nav item');
     ok($navItems.filter(':last').hasClass('testSectionA'), 'Section A is last nav item');
+    ok(!$navItems.filter('.doNotUse').size(), 'doNotUse section is hidden');
   });
 }(jQuery));
