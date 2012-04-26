@@ -78,32 +78,37 @@
       return $navigation;
     }
   };
+
+  var buildUI = function(args) {
+    var $container = args.$container;
+    var $header = elems.header();
+    var $logo = elems.logo();
+    var $navigation = elems.navigation();
+    var $mainArea = elems.mainArea();
+    var sections = args.sections;
+    var sectionDisplay = args.sectionDisplay;
+    
+    $header.append($logo);
+    $container.append(
+      $header,
+      $navigation,
+      $mainArea
+    );
+
+    if (args.sections) {
+      navigation.populate({
+        $navigation: $navigation,
+        sections: sections,
+        sectionDisplay: sectionDisplay
+      });        
+    }
+  };
   
   $.widget('cloudUI.cloudContainer', {
     _init: function() {
-      var args = this.options;
-      var $container = this.element;
-      var $header = elems.header();
-      var $logo = elems.logo();
-      var $navigation = elems.navigation();
-      var $mainArea = elems.mainArea();
-      var sections = args.sections;
-      var sectionDisplay = args.sectionDisplay;
-
-      $header.append($logo);
-      $container.append(
-        $header,
-        $navigation,
-        $mainArea
-      );
-
-      if (args.sections) {
-        navigation.populate({
-          $navigation: $navigation,
-          sections: sections,
-          sectionDisplay: sectionDisplay
-        });        
-      }
+      buildUI($.extend(this.options, {
+        $container: this.element
+      }));
     }
   });    
 }(jQuery));
