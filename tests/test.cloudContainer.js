@@ -89,6 +89,9 @@
     ok($navItems.filter('.active').hasClass('testSectionA'), 'Section A active');
     ok($ui.cloudContainer('showSection', 'testSectionB'), 'Activate section B');
     equal($navItems.filter('.active').size(), 1, 'One section is active');
-    ok($navItems.filter('.active').hasClass('testSectionB'), 'Section B active');    
+    ok($navItems.filter('.active').hasClass('testSectionB'), 'Section B active');
+    ok($navItems.filter('.testSectionA').click(), 'Click on section A');
+    equal($navItems.filter('.active').size(), 1, 'One section is active');
+    ok($navItems.filter('.active').hasClass('testSectionA'), 'Section A active');
   });
 }(jQuery));

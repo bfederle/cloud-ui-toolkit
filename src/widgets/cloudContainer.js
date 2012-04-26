@@ -17,6 +17,7 @@
       var $navItem = $('<li>');
       var $icon = $('<span>').addClass('icon').html('&nbsp;');
       var $title = $('<span>').addClass('title');
+      var $container = args.$container;
       var sectionID = args.sectionID;
       var title = args.title;
 
@@ -24,6 +25,9 @@
       $navItem.addClass('navigation-item');
       $navItem.addClass(sectionID);
       $navItem.append($icon, $title);
+      $navItem.click(function() {
+        $container.cloudContainer('showSection', sectionID);
+      });
 
       return $navItem;
     },
@@ -36,12 +40,14 @@
   // Navigation bar-related functions
   var navigation = {
     addItem: function(args) {
+      var $container = args.$container;
       var $navigation = args.$navigation;
       var $navItem;
       var sectionID = args.sectionID;
       var title = args.title;
 
       $navItem = elems.navItem({
+        $container: $container,
         sectionID: sectionID,
         title: title
       });
@@ -51,6 +57,7 @@
     },
 
     populate: function(args) {
+      var $container = args.$container;
       var $navigation = args.$navigation;
       var sections = args.sections;
       var sectionDisplay = args.sectionDisplay ?
@@ -65,6 +72,7 @@
         var section = sections[sectionID];
 
         navigation.addItem({
+          $container: $container,
           $navigation: $navigation,
           sectionID: sectionID,
           title: section.title
@@ -120,6 +128,7 @@
 
     if (args.sections) {
       navigation.populate({
+        $container: $container,
         $navigation: $navigation,
         sections: sections,
         sectionDisplay: sectionDisplay
