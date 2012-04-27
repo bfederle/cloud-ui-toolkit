@@ -1,4 +1,4 @@
-(function($) {
+(function($, cloudUI) {
   // UI elements
   var elems = {
     header: function() {
@@ -26,13 +26,19 @@
       $navItem.addClass('navigation-item');
       $navItem.addClass(sectionID);
       $navItem.append($icon, $title);
-      $navItem.click(function() {
-        $container.cloudContainer('showSection', sectionID);
+      cloudUI.event.register({
+        $elem: $navItem,
+        id: 'container-navigation-item',
+        data: {
+          $container: $container,
+          sectionID: sectionID
+        }
       });
-
+      
       return $navItem;
     },
 
+    // Where the browser is contained
     mainArea: function() {
       return $('<div>').attr('id', 'main-area');
     }
@@ -169,4 +175,20 @@
       });
     }
   });
-}(jQuery));
+
+  cloudUI.event.handler({
+    'container-navigation-item': {
+      click: function(args) {
+        var $container = args.$container;
+        var sectionID = args.sectionID;
+
+        $container.cloudContainer('showSection', sectionID);
+
+        return false;
+      },
+      mouseover: function(args) {
+        console.log('mouseover!');
+      }
+    }
+  });
+}(jQuery, cloudUI));

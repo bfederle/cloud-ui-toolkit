@@ -72,7 +72,7 @@
   });
 
   test('Show section', function() {
-    var $ui = $('<div>').addClass('ui-container');
+    var $ui = $('<div>').addClass('ui-container').appendTo('#qunit-fixture');
     var ui = {
       sections: {
         testSectionA: {
@@ -98,7 +98,7 @@
   });
 
   test('Append new section', function() {
-    var $ui = $('<div>').addClass('ui-container');
+    var $ui = $('<div>').addClass('ui-container').appendTo('#qunit-fixture');
     var ui = {
       sections: {
         testSectionA: {
@@ -125,8 +125,8 @@
     ok($navItemC.hasClass('testSectionC'), 'New section has correct CSS class');
     equal($navItemC.find('span.title').html(), 'testSectionCTitle', 'New section has correct title');
     equal($navItemC.attr('title'), 'testSectionCTitle', 'New section has tooltip');
-    ok($navItems.filter('.testSectionC').click(), 'Click on section C');
+    ok($navItemC.click(), 'Click section C');
     equal($navItems.filter('.active').size(), 1, 'One section is active');
-    ok($navItems.filter('.active').hasClass('testSectionC'), 'Section C active');
+    ok($navItemC.hasClass('active'), 'Section C active');
   });
 }(jQuery));
