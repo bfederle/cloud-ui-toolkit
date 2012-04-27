@@ -185,9 +185,6 @@
         $container.cloudContainer('showSection', sectionID);
 
         return false;
-      },
-      mouseover: function(args) {
-        console.log('mouseover!');
       }
     }
   });
