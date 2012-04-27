@@ -119,10 +119,14 @@
         title: 'testSectionCTitle'
       }
     }), 'Add new section');
+    $navItems = $ui.find('#navigation ul li');
     $navItemC = $ui.find('#navigation ul li:last');
-    equal($ui.find('#navigation ul li').size(), 3, 'Correct # of nav items');
+    equal($navItems.size(), 3, 'Correct # of nav items');
     ok($navItemC.hasClass('testSectionC'), 'New section has correct CSS class');
     equal($navItemC.find('span.title').html(), 'testSectionCTitle', 'New section has correct title');
     equal($navItemC.attr('title'), 'testSectionCTitle', 'New section has tooltip');
+    ok($navItems.filter('.testSectionC').click(), 'Click on section C');
+    equal($navItems.filter('.active').size(), 1, 'One section is active');
+    ok($navItems.filter('.active').hasClass('testSectionC'), 'Section C active');
   });
 }(jQuery));
