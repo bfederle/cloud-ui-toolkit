@@ -82,6 +82,7 @@
     }
   };
 
+  // Activate section
   var showSection = function(args) {
     var $navigation = args.$navigation;
     var sectionID = args.sectionID;
@@ -92,6 +93,7 @@
     });
   };
 
+  // Add a new section
   var addSection = function(args) {
     var $container = args.$container;
     var $navigation = args.$navigation;
@@ -106,6 +108,7 @@
     });
   };
 
+  // Make container elements
   var buildUI = function(args) {
     var $container = args.$container;
     var $header = elems.header();
