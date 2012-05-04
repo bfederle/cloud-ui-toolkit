@@ -111,6 +111,7 @@
       $navigation: $navigation,
       sectionID: sectionID
     });
+    browser.reset();
     browser.addPanel({
       title: sectionID,
       complete: function($panel) {
