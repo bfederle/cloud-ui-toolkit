@@ -49,5 +49,30 @@
       }
     });
   });
+
+  test('Reset', function() {
+    var $container = $('<div>');
+    var $navigation = $('<div>');
+    var browser = cloudUI.widgets.browser({
+      $container: $container,
+      $navigation: $navigation
+    });
+
+    stop();
+    browser.addPanel({
+      title: 'test',
+      complete: function($panel) {
+        browser.addPanel({
+          title: 'test2',
+          complete: function($panel) {
+            start();
+            browser.reset();
+            equal($container.find('.panel').size(), 0, 'All panels cleared');
+            equal($navigation.find('li, .end').size(), 0, 'All nav items cleared');
+          }
+        });
+      }
+    });
+  });
 }(jQuery, cloudUI));
 
