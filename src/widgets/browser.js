@@ -22,9 +22,7 @@
       var $navigationItem, $navigationItemEnd;
       var index = $panel.index('.panel');
 
-      $navigationItem = $navigation.find('li').filter(function() {
-        return $(this).index('li') == index;
-      });
+      $navigationItem = $($navigation.find('li')[index]);
       $navigationItemEnd = $navigationItem.next('.end');
 
       return $.merge($navigationItem, $navigationItemEnd);

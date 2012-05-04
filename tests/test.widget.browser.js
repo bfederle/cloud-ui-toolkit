@@ -51,8 +51,8 @@
   });
 
   test('Reset', function() {
-    var $container = $('<div>');
-    var $navigation = $('<div>');
+    var $container = $('<div>').appendTo('#qunit-fixture');
+    var $navigation = $('<div>').appendTo('#qunit-fixture');
     var browser = cloudUI.widgets.browser({
       $container: $container,
       $navigation: $navigation
