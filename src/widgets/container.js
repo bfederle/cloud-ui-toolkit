@@ -100,12 +100,27 @@
 
   // Activate section
   var showSection = function(args) {
-    var $navigation = args.$navigation;
+    var container = args.container;
+    var $container = args.$container;
+    var sections = cloudUI.data($container).container.sections;
     var sectionID = args.sectionID;
+    var browser = container.browser;
+    var $navigation = args.$navigation;
 
     navigation.makeActive({
       $navigation: $navigation,
       sectionID: sectionID
+    });
+    browser.addPanel({
+      title: sectionID,
+      complete: function($panel) {
+        var section = sections[sectionID];
+        var content = section ? section.content : null;
+
+        if (content) {
+          sections[sectionID].content().appendTo($panel);          
+        }
+      }
     });
   };
 
@@ -148,7 +163,7 @@
                       $mainArea); 
 
     // Initialize browser
-    browser = cloudUI.widgets.browser({
+    container.browser = cloudUI.widgets.browser({
       $container: $browserContainer,
       $navigation: $browserNavigation
     });
@@ -177,8 +192,11 @@
       firstSection = sectionDisplay[0];
 
       showSection({
+        $container: $container,
         $navigation: $navigation,
-        sectionID: firstSection
+        container: container,
+        sectionID: firstSection,
+        section: sections[firstSection]
       });
     }
   };
@@ -189,7 +207,9 @@
       $elem: $container,
       showSection: function(sectionID) {
         showSection({
+          $container: $container,
           $navigation: $container.find('#navigation'),
+          container: container,
           sectionID: sectionID
         });
 
@@ -201,8 +221,8 @@
 
         addSection({
           $container: $container,
-          container: container,
           $navigation: $container.find('#navigation'),
+          container: container,
           sectionID: sectionID,
           section: section
         });
@@ -210,6 +230,12 @@
         return container;
       }
     };
+
+    $.extend(cloudUI.data($container), {
+      container: {
+        sections: args.sections
+      }
+    });
 
     buildUI($.extend(args, { container: container }));
 

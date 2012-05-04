@@ -137,4 +137,24 @@
     equal($navItems.filter('.active').size(), 1, 'One section is active');
     ok($navItemC.hasClass('active'), 'Section C active');
   });
+
+  test('Show section content', function() {
+    var $ui = $('<div>').addClass('ui-container').appendTo('#qunit-fixture');
+    var container = cloudUI.widgets.container({
+      $elem: $ui,
+      sections: {
+        testSection: {
+          title: 'testSectionTitle',
+          content: function(args) {
+            start();
+            return $('<div>').html('testSectionContent');
+          }
+        }
+      }
+    }); 
+
+    stop();
+    container.showSection('testSection');
+    equal($ui.find('.panel div').html(), 'testSectionContent', 'Content rendered correctly');
+  });
 }(jQuery, cloudUI));
