@@ -142,7 +142,7 @@
     browser.reset();
     browser.addPanel({
       title: section.title,
-      complete: function($panel) {
+      content: function($panel) {
         if (content) {
           sections[sectionID].content().appendTo($panel);
         }

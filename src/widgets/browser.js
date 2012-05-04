@@ -43,7 +43,7 @@
 
       $container.append($panel);
       $navigationList.append($navigationItem);
-      args.complete($panel);
+      args.content($panel);
     },
 
     remove: function(args) {
@@ -91,7 +91,7 @@
           $container: $container,
           $navigation: $navigation,
           browser: browser,
-          complete: args.complete,
+          content: args.content,
           title: args.title
         });
 

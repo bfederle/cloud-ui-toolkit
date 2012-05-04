@@ -25,7 +25,7 @@
     stop();
     browser.addPanel({
       title: 'test',
-      complete: function($panel) {
+      content: function($panel) {
         $panel.append('test contents');
         start();
         ok(true, 'addPanel complete called');
@@ -38,7 +38,7 @@
         stop();
         browser.addPanel({
           title: 'test2',
-          complete: function($panel) {
+          content: function($panel) {
             $panel.append('test contents 2');
             start();
             equal($navigation.find('ul li').size(), 2, 'Second navigation item added');
@@ -61,10 +61,10 @@
     stop();
     browser.addPanel({
       title: 'test',
-      complete: function($panel) {
+      content: function($panel) {
         browser.addPanel({
           title: 'test2',
-          complete: function($panel) {
+          content: function($panel) {
             start();
             browser.reset();
             equal($container.find('.panel').size(), 0, 'All panels cleared');
