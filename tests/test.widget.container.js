@@ -96,12 +96,15 @@
     $navItems = $ui.find('#navigation ul li');
     equal($navItems.filter('.active').size(), 1, 'One section is active');
     ok($navItems.filter('.active').hasClass('testSectionA'), 'Section A active');
+    equal($('#breadcrumbs').find('li > span').html(), 'testSectionATitle', 'Breadcrumb title correct');
     ok(container.showSection('testSectionB'), 'Activate section B');
     equal($navItems.filter('.active').size(), 1, 'One section is active');
     ok($navItems.filter('.active').hasClass('testSectionB'), 'Section B active');
+    equal($('#breadcrumbs').find('li > span').html(), 'testSectionBTitle', 'Breadcrumb title correct');
     ok($navItems.filter('.testSectionA').click(), 'Click on section A');
     equal($navItems.filter('.active').size(), 1, 'One section is active');
     ok($navItems.filter('.active').hasClass('testSectionA'), 'Section A active');
+    equal($('#breadcrumbs').find('li > span').html(), 'testSectionATitle', 'Breadcrumb title correct');
   });
 
   test('Append new section', function() {

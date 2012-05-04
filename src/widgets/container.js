@@ -132,6 +132,8 @@
     var sectionID = args.sectionID;
     var browser = container.browser;
     var $navigation = args.$navigation;
+    var section = sections[sectionID];
+    var content = section ? section.content : null;
 
     navigation.makeActive({
       $navigation: $navigation,
@@ -139,11 +141,8 @@
     });
     browser.reset();
     browser.addPanel({
-      title: sectionID,
+      title: section.title,
       complete: function($panel) {
-        var section = sections[sectionID];
-        var content = section ? section.content : null;
-
         if (content) {
           sections[sectionID].content().appendTo($panel);
         }
