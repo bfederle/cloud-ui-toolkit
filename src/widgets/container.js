@@ -9,6 +9,18 @@
       return $('<div>').addClass('logo');
     },
 
+    browserMainContainer: function() {
+      return $('<div>').attr('id', 'browser');
+    },
+
+    browserContainer: function() {
+      return $('<div>').addClass('container');
+    },
+
+    browserNavigation: function() {
+      return $('<div>').attr('id', 'breadcrumbs').addClass('navigation');
+    },
+
     navigation: function() {
       return $('<div>').attr('id', 'navigation').append($('<ul>'));
     },
@@ -122,13 +134,24 @@
     var $logo = elems.logo();
     var $navigation = elems.navigation();
     var $mainArea = elems.mainArea();
+    var $browserMainContainer = elems.browserMainContainer();
+    var $browserContainer = elems.browserContainer();
+    var $browserNavigation = elems.browserNavigation();
     var sections = args.sections;
     var sectionDisplay, firstSection;
 
     $header.append($logo);
+    $browserMainContainer.append($browserNavigation, $browserContainer);
+    $mainArea.append($browserMainContainer);
     $container.append($header,
                       $navigation,
                       $mainArea); 
+
+    // Initialize browser
+    browser = cloudUI.widgets.browser({
+      $container: $browserContainer,
+      $navigation: $browserNavigation
+    });
 
     if (args.sections) {
       sectionDisplay = args.sectionDisplay ?

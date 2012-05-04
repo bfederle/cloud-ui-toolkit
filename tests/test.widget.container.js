@@ -3,7 +3,7 @@
 
   test('Basic', function() {
     var $ui = $('<div>').addClass('ui-container');
-    var $header, $logo, $navigation, $mainArea;
+    var $header, $logo, $navigation, $mainArea, $browser;
     var container;
 
     container = cloudUI.widgets.container({
@@ -17,10 +17,14 @@
     $logo = $header.find('.logo');
     $navigation = $ui.find('#navigation ul');
     $mainArea = $ui.find('#main-area');
+    $browserContainer = $mainArea.find('#browser .container');
+    $browserNavigation = $mainArea.find('#browser .navigation');
     equal($header.size(), 1, 'Header present');
     equal($logo.size(), 1, 'Logo present');
     equal($navigation.size(), 1, 'Navigation present');
     equal($mainArea.size(), 1, 'Main area present');
+    equal($browserContainer.size(), 1, 'Browser present');
+    equal($browserNavigation.size(), 1, 'Browser present');
   });
 
   test('Add navigation items', function() {
