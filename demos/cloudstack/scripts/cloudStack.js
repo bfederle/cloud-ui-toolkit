@@ -1,6 +1,7 @@
 (function($) {
   $(function() {
     var cloudStack = window.cloudStack = {
+      home: 'dashboard',
       sectionDisplay: [
         'dashboard',
         'instances',
@@ -17,40 +18,40 @@
       ],
       sections: {
         dashboard: {
-          title: 'Dashboard'
+          title: 'Dashboard', content: function() { return $('<div>').html('Dashboard'); }
         },
         instances: {
-          title: 'Instances'
+          title: 'Instances', content: function() { return $('<div>').html('Instances'); }
         },
         storage: {
-          title: 'Storage'
+          title: 'Storage', content: function() { return $('<div>').html('Storage'); }
         },
         network: {
-          title: 'Network'
+          title: 'Network', content: function() { return $('<div>').html('Network'); }
         },
         templates: {
-          title: 'Templates'
+          title: 'Templates', content: function() { return $('<div>').html('Templates'); }
         },
         events: {
-          title: 'Events'
+          title: 'Events', content: function() { return $('<div>').html('Events'); }
         },
         accounts: {
-          title: 'Accounts'
+          title: 'Accounts', content: function() { return $('<div>').html('Accounts'); }
         },
         domains: {
-          title: 'Domains'
+          title: 'Domains', content: function() { return $('<div>').html('Domains'); }
         },
         infrastructure: {
-          title: 'Infrastructure'
+          title: 'Infrastructure', content: function() { return $('<div>').html('Infrastructure'); }
         },
         projects: {
-          title: 'Projects'
+          title: 'Projects', content: function() { return $('<div>').html('Projects'); }
         },
         serviceOfferings: {
-          title: 'Service Offerings'
+          title: 'Service Offerings', content: function() { return $('<div>').html('Service Offerings'); }
         },
         globalSettings: {
-          title: 'Global Settings'
+          title: 'Global Settings', content: function() { return $('<div>').html('Global Settings'); }
         }
       }
     };

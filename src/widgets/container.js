@@ -13,11 +13,24 @@
     browserContainer: function() {
       return $('<div>').addClass('container');
     },
-    browserNavigation: function() {
-      return $('<div>').attr('id', 'breadcrumbs').addClass('navigation');
+    browserNavigation: function(args) {
+      var $browserNavigation = $('<div>').attr('id', 'breadcrumbs').addClass('navigation');
+      var $container = args.$container;
+      var container = args.container;
+
+      $browserNavigation.append(elems.homeButton({
+        $container: $container,
+        container: container
+      }));
+
+      return $browserNavigation;
     },
     navigation: function() {
-      return $('<div>').attr('id', 'navigation').append($('<ul>'));
+      var $navigation = $('<div>').attr('id', 'navigation');
+
+      $navigation.append($('<ul>'));
+
+      return $navigation;
     },
     navItem: function(args) {
       var $navItem = $('<li>');
@@ -49,6 +62,25 @@
     // Where the browser is contained
     mainArea: function() {
       return $('<div>').attr('id', 'main-area');
+    },
+
+    // Home button, at the start of the browser nav
+    homeButton: function(args) {
+      var container = args.container;
+      var $container = args.$container;
+      var $home = $('<div>').addClass('home');
+      var $end = $('<div>').addClass('end');
+
+      cloudUI.event.register({
+        $elem: $home,
+        id: 'container-home',
+        data: {
+          container: container,
+          $container: $container
+        }
+      });
+
+      return $.merge($home, $end);
     }
   };
 
@@ -146,7 +178,10 @@
     var $mainArea = elems.mainArea();
     var $browserMainContainer = elems.browserMainContainer();
     var $browserContainer = elems.browserContainer();
-    var $browserNavigation = elems.browserNavigation();
+    var $browserNavigation = elems.browserNavigation({
+      $container: $container,
+      container: container
+    });
     var sections = args.sections;
     var sectionDisplay, firstSection;
 
@@ -226,6 +261,7 @@
 
     $.extend(cloudUI.data($container), {
       container: {
+        home: args.home,
         sections: args.sections
       }
     });
@@ -246,6 +282,15 @@
         container.showSection(sectionID);
 
         return false;
+      }
+    },
+    'container-home': {
+      click: function(args) {
+        var container = args.container;
+        var $container = args.$container;
+        var homeSection = cloudUI.data($container).container.home;
+
+        container.showSection(homeSection);
       }
     }
   });

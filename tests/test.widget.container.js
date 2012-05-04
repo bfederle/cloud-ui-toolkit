@@ -156,4 +156,38 @@
     container.showSection('testSection');
     equal($ui.find('.panel div').html(), 'testSectionContent', 'Content rendered correctly');
   });
+
+  test('Home button in browser', function() {
+    var $ui = $('<div>').addClass('ui-container').appendTo('#qunit-fixture');
+    var container = cloudUI.widgets.container({
+      $container: $ui,
+      home: 'testSectionA',
+      sections: {
+        testSectionA: {
+          title: 'testSectionATitle',
+          content: function(args) {
+            return $('<div>').html('testSectionContentA');
+          }
+        },
+        testSectionB: {
+          title: 'testSectionBTitle',
+          content: function(args) {
+            return $('<div>').html('testSectionContentB');
+          }
+        }
+      }
+    });
+    var $home = $ui.find('#breadcrumbs > .home');
+
+    equal($home.size(), 1, 'Navigation has home button');
+    equal($home.next('.end').size(), 1, 'Home button has end piece');
+    ok(container.showSection('testSectionB'), 'Switch section');
+    setTimeout(function() { start(); }, 1000);
+    equal($ui.find('.panel > div').html(), 'testSectionContentB', 'New section active');
+    equal($home.size(), 1, 'Navigation has home button');
+    equal($home.next('.end').size(), 1, 'Home button has end piece');
+    $home.click();
+    ok(true, 'Click home button');
+    equal($ui.find('.panel > div').html(), 'testSectionContentA', 'Home section active');
+  });
 }(jQuery, cloudUI));
