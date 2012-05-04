@@ -2,11 +2,12 @@
   var elems = {
     navigationItem: function(args) {
       var $li = $('<li>');
+      var $end = $('<div>').addClass('end');
       var $label = $('<span>').html(args.title);
 
       $li.append($label);
 
-      return $li;
+      return $.merge($li, $end);
     },
     panel: function() {
       return $('<div>').addClass('panel');

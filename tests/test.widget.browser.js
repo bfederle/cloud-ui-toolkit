@@ -30,6 +30,8 @@
         start();
         ok(true, 'addPanel complete called');
         equal($navigation.find('ul li').size(), 1, 'Navigation item added');
+        equal($navigation.find('ul li span').html(), 'test', 'Navigation item has label');
+        equal($navigation.find('ul > div.end').size(), 1, 'Navigation item has end piece');
         equal($container.find('.panel').size(), 1, 'Panel added');
         equal($container.find('.panel').html(), 'test contents', 'Panel has contents');
 
