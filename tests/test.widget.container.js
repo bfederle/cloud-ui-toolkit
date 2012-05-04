@@ -123,7 +123,10 @@
     ok(container.addSection({
       id: 'testSectionC',
       section: {
-        title: 'testSectionCTitle'
+        title: 'testSectionCTitle',
+        content: function() {
+          return $('<div>').html('testSectionCContent');
+        }
       }
     }), 'Add new section');
     $navItems = $ui.find('#navigation ul li');
@@ -135,6 +138,7 @@
     ok($navItemC.click(), 'Click section C');
     equal($navItems.filter('.active').size(), 1, 'One section is active');
     ok($navItemC.hasClass('active'), 'Section C active');
+    equal($ui.find('.panel > div').html(), 'testSectionCContent', 'Content rendered');
   });
 
   test('Show section content', function() {

@@ -158,7 +158,9 @@
     var $navigation = args.$navigation;
     var sectionID = args.sectionID;
     var section = args.section;
+    var sections = cloudUI.data($container).container.sections;
 
+    sections[sectionID] = section;
     navigation.addItem({
       $container: $container,
       container: container,
@@ -262,7 +264,7 @@
     $.extend(cloudUI.data($container), {
       container: {
         home: args.home,
-        sections: args.sections
+        sections: {}
       }
     });
     buildUI($.extend(args, {
