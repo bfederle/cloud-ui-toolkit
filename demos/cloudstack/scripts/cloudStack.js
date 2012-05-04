@@ -18,7 +18,21 @@
       ],
       sections: {
         dashboard: {
-          title: 'Dashboard', content: function() { return $('<div>').html('Dashboard'); }
+          title: 'Dashboard', content: function() {
+            // Test the browser
+            var $button = $('<div>').html('Dashboard ' + $('.panel').size());
+
+            $button.click(function() {
+              cloudStack._container.browser.addPanel({
+                title: 'Panel',
+                complete: function($panel) {
+                  $panel.append(cloudStack.sections.dashboard.content);
+                }
+              });
+            });
+            
+            return $button;
+          }
         },
         instances: {
           title: 'Instances', content: function() { return $('<div>').html('Instances'); }
