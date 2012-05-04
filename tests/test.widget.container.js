@@ -1,12 +1,16 @@
-(function($) {
+(function($, cloudUI) {
   module('Container');
 
   test('Basic', function() {
     var $ui = $('<div>').addClass('ui-container');
     var $header, $logo, $navigation, $mainArea;
-    var ui = {};
+    var container;
 
-    ok($ui.cloudContainer(ui), 'Initialize UI widget');
+    container = cloudUI.widgets.container({
+      $elem: $ui
+    });
+    ok(container, 'Container object initialized');
+    equal(container.$elem, $ui, '$elem accessible');
 
     // Check layout
     $header = $ui.find('#header');
@@ -22,7 +26,8 @@
   test('Add navigation items', function() {
     var $ui = $('<div>').addClass('ui-container');
     var $navItems, $navItemA, $navItemB;
-    var ui = {
+    var container = cloudUI.widgets.container({
+      $elem: $ui,
       sections: {
         testSectionA: {
           title: 'testSectionATitle'
@@ -31,9 +36,8 @@
           title: 'testSectionBTitle'
         }
       }
-    };
+    });
 
-    $ui.cloudContainer(ui);
     $navItems = $ui.find('#navigation ul li');
     $navItemA = $navItems.filter('.testSectionA');
     $navItemB = $navItems.filter('.testSectionB');
@@ -48,7 +52,8 @@
 
   test('Control navigation item display', function() {
     var $ui = $('<div>');
-    var ui = {
+    var container = cloudUI.widgets.container({
+      $elem: $ui,
       sectionDisplay: ['testSectionB', 'testSectionA'],
       sections: {
         testSectionA: {
@@ -61,10 +66,9 @@
           title: 'Hide this section'
         }
       }
-    };
+    });
     var $navItems;
 
-    $ui.cloudContainer(ui);
     $navItems = $ui.find('#navigation ul li');
     ok($navItems.filter(':first').hasClass('testSectionB'), 'Section B is first nav item');
     ok($navItems.filter(':last').hasClass('testSectionA'), 'Section A is last nav item');
@@ -73,7 +77,8 @@
 
   test('Show section', function() {
     var $ui = $('<div>').addClass('ui-container').appendTo('#qunit-fixture');
-    var ui = {
+    var container = cloudUI.widgets.container({
+      $elem: $ui,
       sections: {
         testSectionA: {
           title: 'testSectionATitle'
@@ -82,14 +87,13 @@
           title: 'testSectionBTitle'
         }
       }
-    };
+    });
     var $navItems;
 
-    $ui.cloudContainer(ui);
     $navItems = $ui.find('#navigation ul li');
     equal($navItems.filter('.active').size(), 1, 'One section is active');
     ok($navItems.filter('.active').hasClass('testSectionA'), 'Section A active');
-    ok($ui.cloudContainer('showSection', 'testSectionB'), 'Activate section B');
+    ok(container.showSection('testSectionB'), 'Activate section B');
     equal($navItems.filter('.active').size(), 1, 'One section is active');
     ok($navItems.filter('.active').hasClass('testSectionB'), 'Section B active');
     ok($navItems.filter('.testSectionA').click(), 'Click on section A');
@@ -99,7 +103,8 @@
 
   test('Append new section', function() {
     var $ui = $('<div>').addClass('ui-container').appendTo('#qunit-fixture');
-    var ui = {
+    var container = cloudUI.widgets.container({
+      $elem: $ui,
       sections: {
         testSectionA: {
           title: 'testSectionATitle'
@@ -108,12 +113,11 @@
           title: 'testSectionBTitle'
         }
       }
-    };
+    });
     var $navItems, $navItemC;
 
-    $ui.cloudContainer(ui);
     $navItems = $ui.find('#navigation ul li');
-    ok($ui.cloudContainer('addSection', {
+    ok(container.addSection({
       id: 'testSectionC',
       section: {
         title: 'testSectionCTitle'
@@ -129,4 +133,4 @@
     equal($navItems.filter('.active').size(), 1, 'One section is active');
     ok($navItemC.hasClass('active'), 'Section C active');
   });
-}(jQuery));
+}(jQuery, cloudUI));

@@ -49,4 +49,7 @@
       }
     }
   };
+
+  // Holds widget factories
+  cloudUI.widgets = {};
 }(jQuery));

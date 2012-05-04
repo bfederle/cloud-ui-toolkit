@@ -3,6 +3,7 @@
 
   test('Basic', function() {
     ok($.isPlainObject(window.cloudUI), 'cloudUI namespace exists');
+    ok($.isPlainObject(window.cloudUI.widgets), 'cloudUI widget namespace exists');
   });
 
   test('Data', function() {

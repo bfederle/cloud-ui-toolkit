@@ -1,6 +1,6 @@
 (function($) {
   $(function() {
-    var cloudStack = {
+    var cloudStack = window.cloudStack = {
       sectionDisplay: [
         'dashboard',
         'instances',
@@ -55,6 +55,8 @@
       }
     };
     
-    $('#container').cloudContainer(cloudStack);
+    cloudStack._container = cloudUI.widgets.container($.extend(cloudStack, {
+      $elem: $('#container')
+    }));
   });
 }(jQuery));

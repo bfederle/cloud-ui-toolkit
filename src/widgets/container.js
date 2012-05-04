@@ -18,6 +18,7 @@
       var $icon = $('<span>').addClass('icon').html('&nbsp;');
       var $title = $('<span>').addClass('title');
       var $container = args.$container;
+      var container = args.container;
       var sectionID = args.sectionID;
       var title = args.title;
 
@@ -30,6 +31,7 @@
         $elem: $navItem,
         id: 'container-navigation-item',
         data: {
+          container: container,
           $container: $container,
           sectionID: sectionID
         }
@@ -47,6 +49,7 @@
   // Navigation bar-related functions
   var navigation = {
     addItem: function(args) {
+      var container = args.container;
       var $container = args.$container;
       var $navigation = args.$navigation;
       var $navItem, $navItems;
@@ -55,6 +58,7 @@
 
       $navItem = elems.navItem({
         $container: $container,
+        container: container,
         sectionID: sectionID,
         title: title
       });
@@ -96,12 +100,14 @@
   // Add a new section
   var addSection = function(args) {
     var $container = args.$container;
+    var container = args.container;
     var $navigation = args.$navigation;
     var sectionID = args.sectionID;
     var section = args.section;
 
     navigation.addItem({
       $container: $container,
+      container: container,
       $navigation: $navigation,
       sectionID: sectionID,
       title: section.title
@@ -110,7 +116,8 @@
 
   // Make container elements
   var buildUI = function(args) {
-    var $container = args.$container;
+    var container = args.container;
+    var $container = container.$elem;
     var $header = elems.header();
     var $logo = elems.logo();
     var $navigation = elems.navigation();
@@ -119,11 +126,9 @@
     var sectionDisplay, firstSection;
 
     $header.append($logo);
-    $container.append(
-      $header,
-      $navigation,
-      $mainArea
-    );
+    $container.append($header,
+                      $navigation,
+                      $mainArea); 
 
     if (args.sections) {
       sectionDisplay = args.sectionDisplay ?
@@ -137,6 +142,7 @@
         var section = sections[sectionID];
 
         addSection({
+          container: container,
           $container: $container,
           $navigation: $navigation,
           sectionID: sectionID,
@@ -154,38 +160,46 @@
     }
   };
 
-  $.widget('cloudUI.cloudContainer', {
-    _init: function() {
-      buildUI($.extend(this.options, {
-        $container: this.element
-      }));
-    },
-    showSection: function(sectionID) {
-      showSection({
-        $navigation: this.element.find('#navigation'),
-        sectionID: sectionID
-      });
-    },
-    addSection: function(args) {
-      var sectionID = args.id;
-      var section = args.section;
+  cloudUI.widgets.container = function(args) {
+    var $container = args.$elem;
+    var container = {
+      $elem: $container,
+      showSection: function(sectionID) {
+        showSection({
+          $navigation: $container.find('#navigation'),
+          sectionID: sectionID
+        });
 
-      addSection({
-        $container: this.element,
-        $navigation: this.element.find('#navigation'),
-        sectionID: sectionID,
-        section: section
-      });
-    }
-  });
+        return container;
+      },
+      addSection: function(args) {
+        var sectionID = args.id;
+        var section = args.section;
+
+        addSection({
+          $container: $container,
+          container: container,
+          $navigation: $container.find('#navigation'),
+          sectionID: sectionID,
+          section: section
+        });
+
+        return container;
+      }
+    };
+
+    buildUI($.extend(args, { container: container }));
+
+    return container;
+  };
 
   cloudUI.event.handler({
     'container-navigation-item': {
       click: function(args) {
-        var $container = args.$container;
+        var container = args.container;
         var sectionID = args.sectionID;
 
-        $container.cloudContainer('showSection', sectionID);
+        container.showSection(sectionID);
 
         return false;
       }
