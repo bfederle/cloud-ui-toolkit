@@ -144,7 +144,7 @@
   // Make container elements
   var buildUI = function(args) {
     var container = args.container;
-    var $container = container.$elem;
+    var $container = args.$container;
     var $header = elems.header();
     var $logo = elems.logo();
     var $navigation = elems.navigation();
@@ -202,9 +202,8 @@
   };
 
   cloudUI.widgets.container = function(args) {
-    var $container = args.$elem;
+    var $container = args.$container;
     var container = {
-      $elem: $container,
       showSection: function(sectionID) {
         showSection({
           $container: $container,
@@ -237,7 +236,10 @@
       }
     });
 
-    buildUI($.extend(args, { container: container }));
+    buildUI($.extend(args, {
+      container: container,
+      $container: $container
+    }));
 
     return container;
   };

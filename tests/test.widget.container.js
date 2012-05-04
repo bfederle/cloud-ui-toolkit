@@ -3,14 +3,13 @@
 
   test('Basic', function() {
     var $ui = $('<div>').addClass('ui-container');
-    var $header, $logo, $navigation, $mainArea, $browser;
+    var $header, $logo, $navigation, $mainArea, $browser, $browserContainer, $browserNavigation;
     var container;
 
     container = cloudUI.widgets.container({
-      $elem: $ui
+      $container: $ui
     });
     ok(container, 'Container object initialized');
-    equal(container.$elem, $ui, '$elem accessible');
 
     // Check layout
     $header = $ui.find('#header');
@@ -31,7 +30,7 @@
     var $ui = $('<div>').addClass('ui-container');
     var $navItems, $navItemA, $navItemB;
     var container = cloudUI.widgets.container({
-      $elem: $ui,
+      $container: $ui,
       sections: {
         testSectionA: {
           title: 'testSectionATitle'
@@ -57,7 +56,7 @@
   test('Control navigation item display', function() {
     var $ui = $('<div>');
     var container = cloudUI.widgets.container({
-      $elem: $ui,
+      $container: $ui,
       sectionDisplay: ['testSectionB', 'testSectionA'],
       sections: {
         testSectionA: {
@@ -82,7 +81,7 @@
   test('Show section', function() {
     var $ui = $('<div>').addClass('ui-container').appendTo('#qunit-fixture');
     var container = cloudUI.widgets.container({
-      $elem: $ui,
+      $container: $ui,
       sections: {
         testSectionA: {
           title: 'testSectionATitle'
@@ -108,7 +107,7 @@
   test('Append new section', function() {
     var $ui = $('<div>').addClass('ui-container').appendTo('#qunit-fixture');
     var container = cloudUI.widgets.container({
-      $elem: $ui,
+      $container: $ui,
       sections: {
         testSectionA: {
           title: 'testSectionATitle'
@@ -141,7 +140,7 @@
   test('Show section content', function() {
     var $ui = $('<div>').addClass('ui-container').appendTo('#qunit-fixture');
     var container = cloudUI.widgets.container({
-      $elem: $ui,
+      $container: $ui,
       sections: {
         testSection: {
           title: 'testSectionTitle',

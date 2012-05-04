@@ -17,8 +17,8 @@
     add: function(args) {
       var browser = args.browser;
       var $panel = elems.panel();
-      var $container = browser.$container;
-      var $navigationList = browser.$navigation.find('ul');
+      var $container = args.$container;
+      var $navigationList = args.$navigation.find('ul');
       var $navigationItem = elems.navigationItem({
         title: args.title
       });
@@ -30,18 +30,19 @@
   };
   var makeNavigation = function(args) {
     var browser = args.browser;
-    var $navigation = browser.$navigation;
+    var $navigation = args.$navigation;
 
     $navigation.append($('<ul>'));
   };
 
   cloudUI.widgets.browser = function(args) {
+    var $container = args.$container;
+    var $navigation = args.$navigation;
     var browser = {
-      $container: args.$container,
-      $navigation: args.$navigation,
-
       addPanel: function(args) {
         panel.add({
+          $container: $container,
+          $navigation: $navigation,
           browser: browser,
           complete: args.complete,
           title: args.title
@@ -52,6 +53,8 @@
     };
 
     makeNavigation({
+      $container: $container,
+      $navigation: $navigation,
       browser: browser
     });
 

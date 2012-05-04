@@ -56,7 +56,7 @@
     };
     
     cloudStack._container = cloudUI.widgets.container($.extend(cloudStack, {
-      $elem: $('#container')
+      $container: $('#container')
     }));
   });
 }(jQuery));
