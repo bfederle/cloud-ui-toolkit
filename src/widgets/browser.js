@@ -13,7 +13,6 @@
       return $('<div>').addClass('panel');
     }
   };
-
   var navigation = {
     // Gets the nav item corresponding to the specified panel;
     getItem: function(args) {
@@ -32,7 +31,6 @@
       $navItem.remove();
     }
   };
-  
   var panel = {
     add: function(args) {
       var browser = args.browser;
@@ -47,7 +45,7 @@
       $navigationList.append($navigationItem);
       args.complete($panel);
     },
-    
+
     remove: function(args) {
       var $panel = args.$panel;
       var $navigation = args.$navigation;
@@ -60,7 +58,7 @@
       $panel.remove();
       navigation.removeItem($navigationItem);
     },
-    
+
     removeAll: function(args) {
       var $container = args.$container;
       var $navigation = args.$navigation;
@@ -77,7 +75,6 @@
       });
     }
   };
-  
   var makeNavigation = function(args) {
     var browser = args.browser;
     var $navigation = args.$navigation;

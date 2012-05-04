@@ -4,27 +4,21 @@
     header: function() {
       return $('<div>').attr('id', 'header');
     },
-
     logo: function() {
       return $('<div>').addClass('logo');
     },
-
     browserMainContainer: function() {
       return $('<div>').attr('id', 'browser');
     },
-
     browserContainer: function() {
       return $('<div>').addClass('container');
     },
-
     browserNavigation: function() {
       return $('<div>').attr('id', 'breadcrumbs').addClass('navigation');
     },
-
     navigation: function() {
       return $('<div>').attr('id', 'navigation').append($('<ul>'));
     },
-
     navItem: function(args) {
       var $navItem = $('<li>');
       var $icon = $('<span>').addClass('icon').html('&nbsp;');
@@ -48,7 +42,7 @@
           sectionID: sectionID
         }
       });
-      
+
       return $navItem;
     },
 
@@ -119,7 +113,7 @@
         var content = section ? section.content : null;
 
         if (content) {
-          sections[sectionID].content().appendTo($panel);          
+          sections[sectionID].content().appendTo($panel);
         }
       }
     });
@@ -161,7 +155,7 @@
     $mainArea.append($browserMainContainer);
     $container.append($header,
                       $navigation,
-                      $mainArea); 
+                      $mainArea);
 
     // Initialize browser
     container.browser = cloudUI.widgets.browser({
@@ -175,7 +169,6 @@
         $.map(sections, function(section, sectionID) {
           return sectionID;
         });
-
       $(sectionDisplay).each(function() {
         var sectionID = this.toString();
         var section = sections[sectionID];
@@ -236,7 +229,6 @@
         sections: args.sections
       }
     });
-
     buildUI($.extend(args, {
       container: container,
       $container: $container

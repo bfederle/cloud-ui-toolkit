@@ -150,7 +150,7 @@
           }
         }
       }
-    }); 
+    });
 
     stop();
     container.showSection('testSection');
