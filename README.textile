@@ -1,0 +1,13 @@
+h1. Cloud UI Toolkit
+
+h2. About
+
+The Cloud UI tookit is an extensible, jQuery-based framework for
+building rich UIs. Derived from the development of the user interface
+for the [CloudStack](http://www.cloudstack.org) project, the Cloud UI
+tookit is a collection of widgets and utilities for building
+interfaces for handling large sets of data, with an emphasis on user
+experience.
+
+This library is still under development, and is a heavy refactor of
+the existing widgets in the [current CloudStack UI codebase](https://github.com/CloudStack/CloudStack/tree/master/ui). Documentation and website still under progress.
