@@ -10,4 +10,6 @@ interfaces for handling large sets of data, with an emphasis on user
 experience.
 
 This library is still under development, and is a heavy refactor of
-the existing widgets in the "current CloudStack UI codebase":https://github.com/CloudStack/CloudStack/tree/master/ui. Documentation and website still under progress.
+the existing widgets in the "current CloudStack UI
+codebase":https://github.com/CloudStack/CloudStack/tree/master/ui. Documentation
+and website still under progress.;
