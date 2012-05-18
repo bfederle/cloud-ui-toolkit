@@ -1,4 +1,4 @@
-(function($) {
+(function($, cloudUI) {
   $(function() {
     var cloudStack = window.cloudStack = {
       home: 'dashboard',
@@ -70,8 +70,8 @@
       }
     };
     
-    cloudStack._container = cloudUI.widgets.container($.extend(cloudStack, {
+    cloudStack._container = cloudUI.application($.extend(cloudStack, {
       $container: $('#container')
     }));
   });
-}(jQuery));
+}(jQuery, cloudUI));

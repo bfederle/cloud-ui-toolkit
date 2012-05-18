@@ -7,24 +7,6 @@
     logo: function() {
       return $('<div>').addClass('logo');
     },
-    browserMainContainer: function() {
-      return $('<div>').attr('id', 'browser');
-    },
-    browserContainer: function() {
-      return $('<div>').addClass('container');
-    },
-    browserNavigation: function(args) {
-      var $browserNavigation = $('<div>').attr('id', 'breadcrumbs').addClass('navigation');
-      var $container = args.$container;
-      var container = args.container;
-
-      $browserNavigation.append(elems.homeButton({
-        $container: $container,
-        container: container
-      }));
-
-      return $browserNavigation;
-    },
     navigation: function() {
       var $navigation = $('<div>').attr('id', 'navigation');
 
@@ -38,13 +20,13 @@
       var $title = $('<span>').addClass('title');
       var $container = args.$container;
       var container = args.container;
-      var sectionID = args.sectionID;
+      var navID = args.navID;
       var title = args.title;
 
       $title.html(title);
       $navItem.attr('title', title);
       $navItem.addClass('navigation-item');
-      $navItem.addClass(sectionID);
+      $navItem.addClass(navID);
       $navItem.append($icon, $title);
       cloudUI.event.register({
         $elem: $navItem,
@@ -52,52 +34,67 @@
         data: {
           container: container,
           $container: $container,
-          sectionID: sectionID
+          navID: navID
         }
       });
 
       return $navItem;
     },
 
-    // Where the browser is contained
+    // Where the content is contained
     mainArea: function() {
       return $('<div>').attr('id', 'main-area');
-    },
-
-    // Home button, at the start of the browser nav
-    homeButton: function(args) {
-      var container = args.container;
-      var $container = args.$container;
-      var $home = $('<div>').addClass('home');
-      var $end = $('<div>').addClass('end');
-
-      cloudUI.event.register({
-        $elem: $home,
-        id: 'container-home',
-        data: {
-          container: container,
-          $container: $container
-        }
-      });
-
-      return $.merge($home, $end);
     }
   };
 
   // Navigation bar-related functions
   var navigation = {
+    selectItem: function(args) {
+      var $container = args.$container;
+      var container = args.container;
+      var navigation = cloudUI.data($container).container.navigation;
+      var navID = args.navID;
+      var browser = container.browser;
+      var navItem = navigation[navID];
+      var $navigation = args.$navigation;
+      var $navItems = $navigation.find('li');
+      var $targetNavItem = $navItems.filter(function() {
+        return $(this).hasClass(navID);
+      });
+      var $content = $container.find('#main-area');
+      var events = args.events;
+
+      $targetNavItem.addClass('active');
+      $targetNavItem.siblings().removeClass('active');
+
+      // Trigger nav item's action
+      if (navItem.action) navItem.action({
+        $content: $content
+      });
+
+      if (events.selectNavItem) {
+        events.selectNavItem({
+          navID: navID
+        });
+      }
+    },
     addItem: function(args) {
       var container = args.container;
       var $container = args.$container;
       var $navigation = args.$navigation;
       var $navItem, $navItems;
-      var sectionID = args.sectionID;
-      var title = args.title;
+      var navItem = args.navItem;
+      var navID = args.navID;
+      var title = args.navItem.title;
+      var navigation = cloudUI.data($container).container.navigation;
+
+      // Presist navigation item by adding to navigation data
+      navigation[navID] = navItem;
 
       $navItem = elems.navItem({
         $container: $container,
         container: container,
-        sectionID: sectionID,
+        navID: navID,
         title: title
       });
       $navItem.appendTo($navigation.find('ul'));
@@ -110,7 +107,6 @@
 
       return $navItem;
     },
-
     makeActive: function(args) {
       var sectionID = args.sectionID;
       var $navigation = args.$navigation;
@@ -124,52 +120,6 @@
     }
   };
 
-  // Activate section
-  var showSection = function(args) {
-    var container = args.container;
-    var $container = args.$container;
-    var sections = cloudUI.data($container).container.sections;
-    var sectionID = args.sectionID;
-    var browser = container.browser;
-    var $navigation = args.$navigation;
-    var section = sections[sectionID];
-    var content = section ? section.content : null;
-
-    navigation.makeActive({
-      $navigation: $navigation,
-      sectionID: sectionID
-    });
-    browser.reset();
-    browser.addPanel({
-      title: section.title,
-      content: function($panel) {
-        if (content) {
-          sections[sectionID].content().appendTo($panel);
-        }
-      }
-    });
-  };
-
-  // Add a new section
-  var addSection = function(args) {
-    var $container = args.$container;
-    var container = args.container;
-    var $navigation = args.$navigation;
-    var sectionID = args.sectionID;
-    var section = args.section;
-    var sections = cloudUI.data($container).container.sections;
-
-    sections[sectionID] = section;
-    navigation.addItem({
-      $container: $container,
-      container: container,
-      $navigation: $navigation,
-      sectionID: sectionID,
-      title: section.title
-    });
-  };
-
-  // Make container elements
   var buildUI = function(args) {
     var container = args.container;
     var $container = args.$container;
@@ -177,95 +127,71 @@
     var $logo = elems.logo();
     var $navigation = elems.navigation();
     var $mainArea = elems.mainArea();
-    var $browserMainContainer = elems.browserMainContainer();
-    var $browserContainer = elems.browserContainer();
-    var $browserNavigation = elems.browserNavigation({
-      $container: $container,
-      container: container
-    });
-    var sections = args.sections;
-    var sectionDisplay, firstSection;
+    var navItems = args.navigation;
+    var navDisplay, firstNavItem;
 
     $header.append($logo);
-    $browserMainContainer.append($browserNavigation, $browserContainer);
-    $mainArea.append($browserMainContainer);
     $container.append($header,
                       $navigation,
                       $mainArea);
 
-    // Initialize browser
-    container.browser = cloudUI.widgets.browser({
-      $container: $browserContainer,
-      $navigation: $browserNavigation
-    });
-
-    if (args.sections) {
-      sectionDisplay = args.sectionDisplay ?
-        args.sectionDisplay :
-        $.map(sections, function(section, sectionID) {
-          return sectionID;
+    if (navItems) {
+      navDisplay = args.navigationDisplay ?
+        args.navigationDisplay() :
+        $.map(navItems, function(navItem, navID) {
+          return navID;
         });
-      $(sectionDisplay).each(function() {
-        var sectionID = this.toString();
-        var section = sections[sectionID];
+      $(navDisplay).each(function() {
+        var navID = this.toString();
+        var navItem = navItems[navID];
 
-        addSection({
+        navigation.addItem({
           container: container,
           $container: $container,
           $navigation: $navigation,
-          sectionID: sectionID,
-          section: section
+          navID: navID,
+          navItem: navItem
         });
-      });
-
-      // Get first section
-      firstSection = sectionDisplay[0];
-
-      showSection({
-        $container: $container,
-        $navigation: $navigation,
-        container: container,
-        sectionID: firstSection,
-        section: sections[firstSection]
       });
     }
   };
 
   cloudUI.widgets.container = function(args) {
     var $container = args.$container;
-    var container = {
-      showSection: function(sectionID) {
-        showSection({
+    var events = args.events;
+    var container;
+
+    // Define return object
+    container = {
+      selectNavItem: function(navID) {
+        navigation.selectItem({
+          container: container,
           $container: $container,
           $navigation: $container.find('#navigation'),
-          container: container,
-          sectionID: sectionID
+          navID: navID,
+          events: events ? events : {}
         });
-
-        return container;
       },
-      addSection: function(args) {
-        var sectionID = args.id;
-        var section = args.section;
-
-        addSection({
+      addNavItem: function(args) {
+        navigation.addItem({
+          container: container,
           $container: $container,
           $navigation: $container.find('#navigation'),
-          container: container,
-          sectionID: sectionID,
-          section: section
+          navID: args.id,
+          navItem: args.navItem
         });
 
         return container;
       }
     };
 
+    // Create persistent data store for nav item data
     $.extend(cloudUI.data($container), {
       container: {
-        home: args.home,
-        sections: {}
+        navigation: {}
       }
     });
+    
     buildUI($.extend(args, {
       container: container,
       $container: $container
@@ -278,20 +204,11 @@
     'container-navigation-item': {
       click: function(args) {
         var container = args.container;
-        var sectionID = args.sectionID;
+        var navID = args.navID;
 
-        container.showSection(sectionID);
+        container.selectNavItem(navID);
 
         return false;
-      }
-    },
-    'container-home': {
-      click: function(args) {
-        var container = args.container;
-        var $container = args.$container;
-        var homeSection = cloudUI.data($container).container.home;
-
-        container.showSection(homeSection);
       }
     }
   });

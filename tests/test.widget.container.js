@@ -2,199 +2,144 @@
   module('Container');
 
   test('Basic', function() {
-    var $ui = $('<div>').addClass('ui-container');
-    var $header, $logo, $navigation, $mainArea, $browser, $browserContainer, $browserNavigation;
-    var container;
-
-    container = cloudUI.widgets.container({
-      $container: $ui
+    var $container = $('<div>');
+    var container = cloudUI.widgets.container({
+      $container: $container,
+      navigation: {
+        navItemA: {
+          title: 'navItemATitle',
+          action: function() {}
+        },
+        navItemB: {
+          title: 'navItemBTitle',
+          action: function() {}
+        }
+      }
     });
-    ok(container, 'Container object initialized');
-
-    // Check layout
-    $header = $ui.find('#header');
-    $logo = $header.find('.logo');
-    $navigation = $ui.find('#navigation ul');
-    $mainArea = $ui.find('#main-area');
-    $browserContainer = $mainArea.find('#browser .container');
-    $browserNavigation = $mainArea.find('#browser .navigation');
+    var $header = $container.find('#header');
+    var $logo = $header.find('.logo');
+    var $navigation = $container.find('#navigation ul');
+    var $mainArea = $container.find('#main-area');
     equal($header.size(), 1, 'Header present');
     equal($logo.size(), 1, 'Logo present');
     equal($navigation.size(), 1, 'Navigation present');
     equal($mainArea.size(), 1, 'Main area present');
-    equal($browserContainer.size(), 1, 'Browser present');
-    equal($browserNavigation.size(), 1, 'Browser present');
-  });
-
-  test('Add navigation items', function() {
-    var $ui = $('<div>').addClass('ui-container');
-    var $navItems, $navItemA, $navItemB;
-    var container = cloudUI.widgets.container({
-      $container: $ui,
-      sections: {
-        testSectionA: {
-          title: 'testSectionATitle'
-        },
-        testSectionB: {
-          title: 'testSectionBTitle'
-        }
-      }
-    });
-
-    $navItems = $ui.find('#navigation ul li');
-    $navItemA = $navItems.filter('.testSectionA');
-    $navItemB = $navItems.filter('.testSectionB');
-    equal($navItems.size(), 2, 'Nav item present');
-    equal($navItemA.find('span.title').html(), 'testSectionATitle', 'Section A has correct title');
-    equal($navItemA.attr('title'), 'testSectionATitle', 'Section A has tooltip');
-    equal($navItemB.find('span.title').html(), 'testSectionBTitle', 'Section B has correct title');
-    equal($navItemB.attr('title'), 'testSectionBTitle', 'Section B has tooltip');
-    ok($navItems.filter(':last').hasClass('last'), 'Last nav item has correct class');
-    ok($navItems.filter(':first').hasClass('first'), 'First nav item has correct class');
+    ok($navigation.find('li.navItemA').size(), 'Nav item A has correct ID');
+    equal($navigation.find('li.navItemA > span.title').html(), 'navItemATitle', 'Nav item A has correct title');
+    ok($navigation.find('li.navItemB').size(), 'Nav item B has correct ID');
+    equal($navigation.find('li.navItemB > span.title').html(), 'navItemBTitle', 'Nav item B has correct title');
   });
 
   test('Control navigation item display', function() {
     var $ui = $('<div>');
     var container = cloudUI.widgets.container({
       $container: $ui,
-      sectionDisplay: ['testSectionB', 'testSectionA'],
-      sections: {
-        testSectionA: {
-          title: 'testSectionATitle'
+      navigationDisplay: function() {
+        return ['navItemB', 'navItemA'];
+      },
+      navigation: {
+        navItemA: {
+          title: 'navItemATitle'
         },
-        testSectionB: {
-          title: 'testSectionBTitle'
+        navItemB: {
+          title: 'navItemBTitle'
         },
         doNotUse: {
-          title: 'Hide this section'
+          title: 'Hide this item'
         }
       }
     });
-    var $navItems;
-
-    $navItems = $ui.find('#navigation ul li');
-    ok($navItems.filter(':first').hasClass('testSectionB'), 'Section B is first nav item');
-    ok($navItems.filter(':last').hasClass('testSectionA'), 'Section A is last nav item');
+    var $navItems = $ui.find('#navigation ul li');
+    
+    ok($navItems.filter(':first').hasClass('navItemB'), 'Item B is first nav item');
+    ok($navItems.filter(':last').hasClass('navItemA'), 'Item A is last nav item');
     ok(!$navItems.filter('.doNotUse').size(), 'doNotUse section is hidden');
   });
 
-  test('Show section', function() {
-    var $ui = $('<div>').addClass('ui-container').appendTo('#qunit-fixture');
+  test('Handle nav item action', function() {
+    var $container = $('<div>').addClass('ui-container').appendTo('#qunit-fixture');
     var container = cloudUI.widgets.container({
-      $container: $ui,
-      sections: {
-        testSectionA: {
-          title: 'testSectionATitle'
+      $container: $container,
+      navigation: {
+        navItemA: {
+          title: 'navItemATitle'
         },
-        testSectionB: {
-          title: 'testSectionBTitle'
+        navItemB: {
+          title: 'navItemBTitle',
+          action: function(args) {
+            var $content = args.$content;
+
+            start();
+            ok(true, 'Nav item action called');
+            ok($content.size(), 'Content area passed');
+            equal($navItems.filter('.active').size(), 1, 'One section is active');
+          }
         }
       }
     });
-    var $navItems;
-
-    $navItems = $ui.find('#navigation ul li');
-    equal($navItems.filter('.active').size(), 1, 'One section is active');
-    ok($navItems.filter('.active').hasClass('testSectionA'), 'Section A active');
-    equal($('#breadcrumbs').find('li > span').html(), 'testSectionATitle', 'Breadcrumb title correct');
-    ok(container.showSection('testSectionB'), 'Activate section B');
-    equal($navItems.filter('.active').size(), 1, 'One section is active');
-    ok($navItems.filter('.active').hasClass('testSectionB'), 'Section B active');
-    equal($('#breadcrumbs').find('li > span').html(), 'testSectionBTitle', 'Breadcrumb title correct');
-    ok($navItems.filter('.testSectionA').click(), 'Click on section A');
-    equal($navItems.filter('.active').size(), 1, 'One section is active');
-    ok($navItems.filter('.active').hasClass('testSectionA'), 'Section A active');
-    equal($('#breadcrumbs').find('li > span').html(), 'testSectionATitle', 'Breadcrumb title correct');
+    var $navItems = $container.find('#navigation ul li');
+    
+    stop();
+    $navItems.filter('.navItemB').click();
   });
 
-  test('Append new section', function() {
-    var $ui = $('<div>').addClass('ui-container').appendTo('#qunit-fixture');
+  test('Append new nav item', function() {
+    var $container = $('<div>').addClass('ui-container').appendTo('#qunit-fixture');
     var container = cloudUI.widgets.container({
-      $container: $ui,
-      sections: {
-        testSectionA: {
-          title: 'testSectionATitle'
+      $container: $container,
+      navigation: {
+        navItemA: {
+          title: 'navItemATitle'
         },
-        testSectionB: {
-          title: 'testSectionBTitle'
+        navItemB: {
+          title: 'navItemBTitle'
         }
       }
     });
     var $navItems, $navItemC;
 
-    $navItems = $ui.find('#navigation ul li');
-    ok(container.addSection({
-      id: 'testSectionC',
-      section: {
-        title: 'testSectionCTitle',
-        content: function() {
-          return $('<div>').html('testSectionCContent');
+    $navItems = $container.find('#navigation ul li');
+    container.addNavItem({
+      id: 'navItemC',
+      navItem: {
+        title: 'navItemCTitle',
+        action: function() {
+          start();
+          ok(true, 'New item action called');
         }
       }
-    }), 'Add new section');
-    $navItems = $ui.find('#navigation ul li');
-    $navItemC = $ui.find('#navigation ul li:last');
+    });
+    $navItems = $container.find('#navigation ul li');
+    $navItemC = $container.find('#navigation ul li:last');
     equal($navItems.size(), 3, 'Correct # of nav items');
-    ok($navItemC.hasClass('testSectionC'), 'New section has correct CSS class');
-    equal($navItemC.find('span.title').html(), 'testSectionCTitle', 'New section has correct title');
-    equal($navItemC.attr('title'), 'testSectionCTitle', 'New section has tooltip');
-    ok($navItemC.click(), 'Click section C');
-    equal($navItems.filter('.active').size(), 1, 'One section is active');
-    ok($navItemC.hasClass('active'), 'Section C active');
-    equal($ui.find('.panel > div').html(), 'testSectionCContent', 'Content rendered');
-  });
-
-  test('Show section content', function() {
-    var $ui = $('<div>').addClass('ui-container').appendTo('#qunit-fixture');
-    var container = cloudUI.widgets.container({
-      $container: $ui,
-      sections: {
-        testSection: {
-          title: 'testSectionTitle',
-          content: function(args) {
-            start();
-            return $('<div>').html('testSectionContent');
-          }
-        }
-      }
-    });
-
+    ok($navItemC.hasClass('navItemC'), 'New section has correct CSS class');
+    equal($navItemC.find('span.title').html(), 'navItemCTitle', 'New section has correct title');
+    equal($navItemC.attr('title'), 'navItemCTitle', 'New section has tooltip');
     stop();
-    container.showSection('testSection');
-    equal($ui.find('.panel div').html(), 'testSectionContent', 'Content rendered correctly');
+    $navItemC.click();
   });
 
-  test('Home button in browser', function() {
-    var $ui = $('<div>').addClass('ui-container').appendTo('#qunit-fixture');
+  test('selectNavItem event', function() {
+    var $container = $('<div>').addClass('ui-container').appendTo('#qunit-fixture');
     var container = cloudUI.widgets.container({
-      $container: $ui,
-      home: 'testSectionA',
-      sections: {
-        testSectionA: {
-          title: 'testSectionATitle',
-          content: function(args) {
-            return $('<div>').html('testSectionContentA');
-          }
+      $container: $container,
+      navigation: {
+        navItemA: {
+          title: 'navItemATitle'
         },
-        testSectionB: {
-          title: 'testSectionBTitle',
-          content: function(args) {
-            return $('<div>').html('testSectionContentB');
-          }
+        navItemB: {
+          title: 'navItemBTitle'
         }
+      },
+      events: {
+        selectNavItem: function(args) {
+          start();
+          ok(true, 'selectNavItem called');
+          equal(args.navID, 'navItemB', 'Correct section ID passed');
+        }        
       }
     });
-    var $home = $ui.find('#breadcrumbs > .home');
-
-    equal($home.size(), 1, 'Navigation has home button');
-    equal($home.next('.end').size(), 1, 'Home button has end piece');
-    ok(container.showSection('testSectionB'), 'Switch section');
-    setTimeout(function() { start(); }, 1000);
-    equal($ui.find('.panel > div').html(), 'testSectionContentB', 'New section active');
-    equal($home.size(), 1, 'Navigation has home button');
-    equal($home.next('.end').size(), 1, 'Home button has end piece');
-    $home.click();
-    ok(true, 'Click home button');
-    equal($ui.find('.panel > div').html(), 'testSectionContentA', 'Home section active');
+    stop();
+    ok($container.find('#navigation li.navItemB').click(), 'Click nav item B');
   });
 }(jQuery, cloudUI));
