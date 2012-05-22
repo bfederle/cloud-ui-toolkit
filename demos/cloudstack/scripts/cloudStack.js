@@ -23,9 +23,9 @@
             var $button = $('<div>').html('Dashboard ' + $('.panel').size());
 
             $button.click(function() {
-              cloudStack._container.browser.addPanel({
+              cloudStack._container.widgets.browser.addPanel({
                 title: 'Panel',
-                complete: function($panel) {
+                content: function($panel) {
                   $panel.append(cloudStack.sections.dashboard.content);
                 }
               });

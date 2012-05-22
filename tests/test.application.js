@@ -144,4 +144,29 @@
     };
     $app.find('#breadcrumbs > .home').click();
   });
+
+  test('Show content', function() {
+    var $app = $('<div>');
+    var app;
+
+    stop();
+    
+    app = cloudUI.application({
+      $container: $app,
+      home: 'testSection',
+      sections: {
+        testSection: {
+          title: 'testSectionTitle',
+          content: function() {
+            start();
+            ok(true, 'content called');
+
+            return $('<div>').addClass('testSectionContent');
+          }
+        }
+      }
+    });
+
+    equal($app.find('#browser .container .panel > div.testSectionContent').size(), 1, 'Content rendered');
+  });
 }(jQuery, cloudUI));

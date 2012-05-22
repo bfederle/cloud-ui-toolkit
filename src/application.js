@@ -71,12 +71,15 @@
     var container = args.application.widgets.container;
     var sectionID = args.sectionID;
     var sectionTitle = args.section.title;
+    var sectionContent = args.section.content;
     var selectNavItem = args.selectNavItem;
 
     browser.reset();
     browser.addPanel({
       content: function($panel) {
-        return '';
+        return sectionContent ?
+          sectionContent().appendTo($panel) :
+          '';
       },
       title: sectionTitle
     });
