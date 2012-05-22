@@ -106,7 +106,13 @@
           duration: duration,
           easing: 'easeOutCirc',
           complete: function() {
+            if (!$panel.is(':visible')) {
+              return false;
+            }
+
             args.content($panel);
+
+            return true;
           }
         }
       );
