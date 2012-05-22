@@ -98,24 +98,29 @@
       $navigationList.append($navigationItem);
 
       // Slide-in panel
-      $panel.animate(
-        {
-          left: 0
-        },
-        {
-          duration: duration,
-          easing: 'easeOutCirc',
-          complete: function() {
-            if (!$panel.is(':visible')) {
-              return false;
+      if ($panel.index()) {
+        $panel.animate(
+          {
+            left: 0
+          },
+          {
+            duration: duration,
+            easing: 'easeOutCirc',
+            complete: function() {
+              if (!$panel.is(':visible')) {
+                return false;
+              }
+
+              args.content($panel);
+
+              return true;
             }
-
-            args.content($panel);
-
-            return true;
           }
-        }
-      );
+        );
+      } else {
+        $panel.css({ left: 0 });
+        args.content($panel);
+      }
     },
 
     // Remove panel from browser
