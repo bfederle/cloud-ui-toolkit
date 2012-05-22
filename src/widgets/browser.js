@@ -10,9 +10,17 @@
       return $.merge($li, $end);
     },
     panel: function() {
-      return $('<div>').addClass('panel');
+      var $panel = $('<div>').addClass('panel');
+
+      // For consistency, width and positoning computation is handled directly in JS
+      $panel.css({
+        position: 'absolute'
+      });
+      
+      return $panel;
     }
   };
+
   var navigation = {
     // Gets the nav item corresponding to the specified panel;
     getItem: function(args) {
@@ -31,7 +39,25 @@
       $navItem.remove();
     }
   };
+
   var panel = {
+    // Get new z-index for adding panel, for correct stacking
+    zIndex: function(args) {
+      var $container = args.$container;
+      var $panels = $container.find('.panel');
+      
+      return $panels.size() ?
+        parseInt($panels.filter(':last').css('z-index')) + 1 : 0;
+    },
+
+    // Compute initial panel width, based on container's dimensions
+    width: function(args) {
+      var $container = args.$container;
+
+      return $container.width();
+    },
+
+    // Append new panel to browser
     add: function(args) {
       var browser = args.browser;
       var $panel = elems.panel();
@@ -40,12 +66,21 @@
       var $navigationItem = elems.navigationItem({
         title: args.title
       });
+      var zIndex, panelWidth;
 
+      // Get initial positioning
+      zIndex = panel.zIndex({ $container: $container });
+      panelWidth = panel.width({ $container: $container });
+      $panel.css({ zIndex: zIndex });
+      $panel.width(panelWidth);
+
+      // Append elements
       $container.append($panel);
       $navigationList.append($navigationItem);
       args.content($panel);
     },
 
+    // Remove panel from browser
     remove: function(args) {
       var $panel = args.$panel;
       var $navigation = args.$navigation;
@@ -59,6 +94,7 @@
       navigation.removeItem($navigationItem);
     },
 
+    // Clears out all panels from browser
     removeAll: function(args) {
       var $container = args.$container;
       var $navigation = args.$navigation;
@@ -75,6 +111,7 @@
       });
     }
   };
+  
   var makeNavigation = function(args) {
     var browser = args.browser;
     var $navigation = args.$navigation;
