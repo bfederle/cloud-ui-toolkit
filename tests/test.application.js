@@ -140,7 +140,7 @@
       start();
       ok(true, 'Nav item selected');
       equal(sectionID, 'sectionA', 'Section ID correct');
-      equal($app.find('#breadcrumbs li > span').html(), 'sectionA', 'Breadcrumb correct');
+      equal($app.find('#breadcrumbs li > span').html(), 'sectionATitle', 'Breadcrumb correct');
     };
     $app.find('#breadcrumbs > .home').click();
   });

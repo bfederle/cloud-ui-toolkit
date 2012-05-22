@@ -70,6 +70,7 @@
     var browser = args.application.widgets.browser;
     var container = args.application.widgets.container;
     var sectionID = args.sectionID;
+    var sectionTitle = args.section.title;
     var selectNavItem = args.selectNavItem;
 
     browser.reset();
@@ -77,7 +78,7 @@
       content: function($panel) {
         return '';
       },
-      title: sectionID
+      title: sectionTitle
     });
 
     if (selectNavItem) {
@@ -96,9 +97,12 @@
       widgets: {}, // Stores widget instances used by app
 
       showSection: function(sectionID) {
+        var section = sections[sectionID];
+        
         showSection({
           application: application,
           sectionID: sectionID,
+          section: section,
           selectNavItem: true
         });
         
@@ -115,10 +119,12 @@
       events: {
         selectNavItem: function(args) {
           var sectionID = args.navID;
+          var section = sections[sectionID];
 
           showSection({
             application: application,
             sectionID: sectionID,
+            section: section,
             selectNavItem: false
           }); 
         }
