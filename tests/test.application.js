@@ -146,7 +146,7 @@
   });
 
   test('Show content', function() {
-    var $app = $('<div>');
+    var $app = $('<div>').appendTo('#qunit-fixture');
     var app;
 
     stop();

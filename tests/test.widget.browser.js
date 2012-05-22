@@ -15,7 +15,7 @@
 
 
   test('Add panel', function() {
-    var $container = $('<div>');
+    var $container = $('<div>').appendTo('#qunit-fixture');
     var $navigation = $('<div>');
     var browser = cloudUI.widgets.browser({
       $container: $container,
