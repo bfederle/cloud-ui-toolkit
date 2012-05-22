@@ -19,12 +19,12 @@
       sections: {
         dashboard: {
           title: 'Dashboard', content: function() {
-            // Test the browser
-            var $button = $('<div>').html('Dashboard ' + $('.panel').size());
+            var testText = 'Dashboard ' + $('.panel').size();
+            var $button = $('<div>').html(testText);
 
             $button.click(function() {
               cloudStack._container.widgets.browser.addPanel({
-                title: 'Panel',
+                title: testText,
                 content: function($panel) {
                   $panel.append(cloudStack.sections.dashboard.content);
                 }
