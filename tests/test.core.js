@@ -1,4 +1,7 @@
 (function($, cloudUI) {
+  // Make sure no animations play -- messes up the timing for tests!
+  $.fx.off = true;
+
   module('Core');
 
   test('Basic', function() {

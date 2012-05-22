@@ -31,7 +31,9 @@
       content: function($panel1) {
         var zIndexPanel1 = parseInt($panel1.css('z-index'));
 
-        $panel1.append('test contents');
+        $panel1.append(
+          $('<div>').addClass('testContents').html('test contents')
+        );
 
         start();
         ok(true, 'addPanel complete called');
@@ -39,7 +41,8 @@
         equal($navigation.find('ul li span').html(), 'test', 'Navigation item has label');
         equal($navigation.find('ul > div.end').size(), 1, 'Navigation item has end piece');
         equal($container.find('.panel').size(), 1, 'Panel added');
-        equal($container.find('.panel').html(), 'test contents', 'Panel has contents');
+        equal($container.find('.panel > div.shadow').size(), 1, 'Panel has shadow');
+        equal($container.find('.panel > div.testContents').html(), 'test contents', 'Panel has contents');
         stop();
         
         browser.addPanel({
@@ -47,12 +50,14 @@
           content: function($panel2) {
             var zIndexPanel2 = parseInt($panel2.css('z-index'));
 
-            $panel2.append('test contents 2');
+            $panel2.append(
+              $('<div>').addClass('testContents2').html('test contents 2')
+            );
 
             start();
             equal($navigation.find('ul li').size(), 2, 'Second navigation item added');
             equal($container.find('.panel').size(), 2, 'Second panel added');
-            equal($container.find('.panel:last').html(), 'test contents 2', 'Second panel has contents');
+            equal($container.find('.panel:last > div.testContents2').html(), 'test contents 2', 'Second panel has contents');
             equal(zIndexPanel2, zIndexPanel1 + 1, 'Z-index correct');
             equal($panel2.width(), $container.width(), 'Width correct');
           }
