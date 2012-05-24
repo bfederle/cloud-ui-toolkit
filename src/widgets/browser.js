@@ -81,6 +81,7 @@
       var $navigationItem = elems.navigationItem({
         title: args.title
       });
+      var $overlay = $('<div>').addClass('loading-overlay').css('opacity', 0);
       var zIndex, panelWidth, panelInitialPos, panelIndex;
 
       // Setup nav item event behavior
@@ -117,6 +118,7 @@
 
       // Slide-in panel
       if (panelIndex) {
+        $overlay.appendTo($container); // Prevent clicks while animating
         $panel.animate(
           {
             left: 0
@@ -125,6 +127,8 @@
             duration: duration,
             easing: 'easeOutCirc',
             complete: function() {
+              $overlay.remove();
+              
               if (!$panel.is(':visible')) {
                 return false;
               }
@@ -293,7 +297,7 @@
           $container: $container,
           $navigation: $navigation
         });
-        
+
         return browser;
       }
     };
