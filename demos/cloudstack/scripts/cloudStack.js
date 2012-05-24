@@ -19,8 +19,8 @@
       sections: {
         dashboard: {
           title: 'Dashboard', content: function() {
-            var testText = 'Dashboard ' + $('.panel').size();
-            var $button = $('<div>').html(testText);
+            var testText = 'Page ' + $('.panel').size();
+            var $button = $('<div>').html('Click ' + parseInt($('.panel').size() - 1));
 
             $button.click(function() {
               cloudStack._container.widgets.browser.addPanel({
