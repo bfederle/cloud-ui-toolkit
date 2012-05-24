@@ -128,7 +128,7 @@
             easing: 'easeOutCirc',
             complete: function() {
               $overlay.remove();
-              
+
               if (!$panel.is(':visible')) {
                 return false;
               }
