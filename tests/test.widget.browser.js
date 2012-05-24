@@ -117,28 +117,34 @@
                 equal($panel1[0], $lastPanel[0], 'Correct last panel');
                 ok($panel1.is(':visible'), '$panel1 visible');
                 ok(!$panel2.is(':visible'), '$panel2 not visible');
-              }
-            });
 
-            // Test via breadcrumb click
-            stop();
-            browser.addPanel({
-              title: 'test3',
-              content: function($panel3) {
-                start();
-                ok($panel1.is(':visible'), '$panel1 visible');
-                ok($panel3.is(':visible'), '$panel3 visible');
-                equal($container.find('.panel').size(), 2, 'Correct # of panels');
-                equal($navigation.find('li').size(), 2, 'Correct # of nav items');
+                // Test via breadcrumb click
+                stop();
+                browser.addPanel({
+                  title: 'test3',
+                  content: function($panel3) {
+                    start();
+                    ok($panel1.is(':visible'), '$panel1 visible');
+                    ok($panel3.is(':visible'), '$panel3 visible');
+                    equal($container.find('.panel').size(), 2, 'Correct # of panels');
+                    equal($navigation.find('li').size(), 2, 'Correct # of nav items');
 
-                $navigation.find('li:first').click();
+                    $navigation.find('li:first').click();
 
-                equal($container.find('.panel').size(), 1, 'Correct # of panels');
-                equal($navigation.find('li').size(), 1, 'Correct # of nav items');
-                equal($navigation.find('ul .end').size(), 1, 'Correct # of nav item ends');
-                ok($panel1.is(':visible'), '$panel1 visible');
-                ok(!$panel2.is(':visible'), '$panel2 not visible');
-                ok(!$panel3.is(':visible'), '$panel3 not visible');
+                    stop();
+
+                    // Panel selection is animated
+                    setTimeout(function() {
+                      start();
+                      equal($container.find('.panel').size(), 1, 'Correct # of panels');
+                      equal($navigation.find('li').size(), 1, 'Correct # of nav items');
+                      equal($navigation.find('ul .end').size(), 1, 'Correct # of nav item ends');
+                      ok($panel1.is(':visible'), '$panel1 visible');
+                      ok(!$panel2.is(':visible'), '$panel2 not visible');
+                      ok(!$panel3.is(':visible'), '$panel3 not visible');
+                    });
+                  }
+                });
               }
             });
           }

@@ -29,9 +29,11 @@
       var $panel = args.$panel;
       var $navigation = args.$navigation;
       var $navigationItem, $navigationItemEnd;
-      var index = $panel.index('.panel');
+      var panelIndex = cloudUI.data($panel).panelIndex;
 
-      $navigationItem = $($navigation.find('li')[index]);
+      $navigationItem = $navigation.find('li').filter(function() {
+        return cloudUI.data($(this)).panelIndex == panelIndex;
+      });
       $navigationItemEnd = $navigationItem.next('.end');
 
       return $.merge($navigationItem, $navigationItemEnd);
@@ -79,7 +81,7 @@
       var $navigationItem = elems.navigationItem({
         title: args.title
       });
-      var zIndex, panelWidth, panelInitialPos;
+      var zIndex, panelWidth, panelInitialPos, panelIndex;
 
       // Setup nav item event behavior
       cloudUI.event.register({
@@ -108,8 +110,13 @@
       $container.append($panel);
       $navigationList.append($navigationItem);
 
+      // Setup panel index
+      panelIndex = $panel.index();
+      cloudUI.data($panel).panelIndex = panelIndex;
+      cloudUI.data($navigationItem).panelIndex = panelIndex;
+
       // Slide-in panel
-      if ($panel.index()) {
+      if (panelIndex) {
         $panel.animate(
           {
             left: 0
@@ -143,9 +150,35 @@
         $navigation: $navigation
       });
       var $container = args.$container;
+      var animate = args.animate;
+      var complete = args.complete;
 
-      $panel.remove();
-      navigation.removeItem($navigationItem);
+      if (animate) {
+        $navigationItem.remove();
+
+        $panel.animate(
+          {
+            left: panel.hiddenPosition({
+              $container: $container,
+              $panel: $panel
+            })
+          },
+          {
+            duration: 500,
+            easing: 'easeOutCirc',
+            complete: function() {
+              $panel.remove();
+
+              if (complete) complete();
+            }
+          }
+        );
+      } else {
+        $panel.remove();
+        navigation.removeItem($navigationItem);
+
+        if (complete) complete();
+      }
     },
 
     // Clears out all panels from browser
@@ -178,28 +211,37 @@
       var $targetPanel = args.$targetPanel;
       var browser = args.browser;
       var complete = args.complete;
-      var $removePanels;
+      var $removePanels, removePanelTotal, removePanelCurrent;
 
       // Get panels to remove
       $removePanels = panel.getAll($container).filter(function() {
         var $panel = $(this);
+        var thisPanelIndex = cloudUI.data($panel).panelIndex;
+        var targetPanelIndex = cloudUI.data($targetPanel).panelIndex;
 
-        return $panel.index() > $targetPanel.index();
+        return thisPanelIndex > targetPanelIndex;
       });
 
       // Remove specified panels + navigation
+      removePanelTotal = $removePanels.size();
+      removePanelCurrent = 0;
       $removePanels.each(function() {
         var $panel = $(this);
 
         panel.remove({
           $panel: $panel,
-          $navigation: $navigation
+          $navigation: $navigation,
+          $container: $container,
+          animate: true,
+          complete: function() {
+            removePanelCurrent++;
+
+            if (removePanelTotal == removePanelCurrent && complete) {
+              complete($targetPanel);
+            }
+          }
         });
       });
-
-      if (complete) {
-        args.complete($targetPanel);
-      }
     }
   };
 
