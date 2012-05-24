@@ -17,7 +17,7 @@
       $panel.css({
         position: 'absolute'
       });
-      
+
       return $panel.append($shadow);
     }
   };
@@ -46,7 +46,7 @@
     zIndex: function(args) {
       var $container = args.$container;
       var $panels = $container.find('.panel');
-      
+
       return $panels.size() ?
         parseInt($panels.filter(':last').css('z-index')) + 1 : 0;
     },
@@ -154,7 +154,7 @@
       });
     }
   };
-  
+
   var makeNavigation = function(args) {
     var browser = args.browser;
     var $navigation = args.$navigation;
@@ -166,7 +166,7 @@
     var $container = args.$container;
     var $navigation = args.$navigation;
     var panelSpeed = args.panelSpeed; // The duration of panel slide-in/out
-    
+
     var browser = {
       addPanel: function(args) {
         panel.add({

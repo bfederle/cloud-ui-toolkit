@@ -44,7 +44,7 @@
         equal($container.find('.panel > div.shadow').size(), 1, 'Panel has shadow');
         equal($container.find('.panel > div.testContents').html(), 'test contents', 'Panel has contents');
         stop();
-        
+
         browser.addPanel({
           title: 'test2',
           content: function($panel2) {

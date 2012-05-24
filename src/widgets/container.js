@@ -191,7 +191,7 @@
         navigation: {}
       }
     });
-    
+
     buildUI($.extend(args, {
       container: container,
       $container: $container

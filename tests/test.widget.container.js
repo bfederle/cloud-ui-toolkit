@@ -50,7 +50,7 @@
       }
     });
     var $navItems = $ui.find('#navigation ul li');
-    
+
     ok($navItems.filter(':first').hasClass('navItemB'), 'Item B is first nav item');
     ok($navItems.filter(':last').hasClass('navItemA'), 'Item A is last nav item');
     ok(!$navItems.filter('.doNotUse').size(), 'doNotUse section is hidden');
@@ -78,7 +78,7 @@
       }
     });
     var $navItems = $container.find('#navigation ul li');
-    
+
     stop();
     $navItems.filter('.navItemB').click();
   });
@@ -136,7 +136,7 @@
           start();
           ok(true, 'selectNavItem called');
           equal(args.navID, 'navItemB', 'Correct section ID passed');
-        }        
+        }
       }
     });
     stop();

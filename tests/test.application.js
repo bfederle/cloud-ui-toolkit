@@ -87,7 +87,7 @@
           ok(true, 'addPanel called');
         }
       };
-    };    
+    };
     app = cloudUI.application({
       $container: $app,
       home: 'sectionA',
@@ -150,7 +150,7 @@
     var app;
 
     stop();
-    
+
     app = cloudUI.application({
       $container: $app,
       home: 'testSection',

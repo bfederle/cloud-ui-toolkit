@@ -7,7 +7,7 @@
       var sections = args.sections;
       var home = args.home;
       var events = args.events;
-      
+
       // Make widget
       container = cloudUI.widgets.container({
         $container: $container,
@@ -39,7 +39,7 @@
       );
       var application = args.application;
       var browser;
-      
+
       // Setup home button behavior
       cloudUI.event.register({
         $elem: $homeButton,
@@ -49,7 +49,7 @@
           application: application
         }
       });
-      
+
       $navigation.append($homeButton);
       $browserContainer.append($navigation, $browserSubContainer);
       $container.find('#main-area').append($browserContainer);
@@ -59,7 +59,7 @@
         $container: $browserSubContainer,
         $navigation: $navigation
       });
-      
+
       return browser;
     }
   };
@@ -85,10 +85,10 @@
     });
 
     if (selectNavItem) {
-      container.selectNavItem(sectionID);      
+      container.selectNavItem(sectionID);
     }
   };
-  
+
   cloudUI.application = function(args) {
     var $container = args.$container;
     var sections = args.sections;
@@ -101,14 +101,14 @@
 
       showSection: function(sectionID) {
         var section = sections[sectionID];
-        
+
         showSection({
           application: application,
           sectionID: sectionID,
           section: section,
           selectNavItem: true
         });
-        
+
         return application;
       }
     };
@@ -129,7 +129,7 @@
             sectionID: sectionID,
             section: section,
             selectNavItem: false
-          }); 
+          });
         }
       }
     });
