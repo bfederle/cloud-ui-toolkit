@@ -6,6 +6,7 @@
       var $label = $('<span>').html(args.title);
 
       $li.append($label);
+      $li.attr('title', args.title);
 
       return $.merge($li, $end);
     },
