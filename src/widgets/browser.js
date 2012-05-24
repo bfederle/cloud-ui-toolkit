@@ -152,6 +152,7 @@
       var $container = args.$container;
       var animate = args.animate;
       var complete = args.complete;
+      var slideOutDuration = args.slideOutDuration;
 
       if (animate) {
         $navigationItem.remove();
@@ -164,7 +165,7 @@
             })
           },
           {
-            duration: 500,
+            duration: slideOutDuration,
             easing: 'easeOutCirc',
             complete: function() {
               $panel.remove();
@@ -212,6 +213,7 @@
       var browser = args.browser;
       var complete = args.complete;
       var $removePanels, removePanelTotal, removePanelCurrent;
+      var duration = args.duration;
 
       // Get panels to remove
       $removePanels = panel.getAll($container).filter(function() {
@@ -233,6 +235,7 @@
           $navigation: $navigation,
           $container: $container,
           animate: true,
+          slideOutDuration: duration,
           complete: function() {
             removePanelCurrent++;
 
@@ -255,7 +258,7 @@
   cloudUI.widgets.browser = function(args) {
     var $container = args.$container;
     var $navigation = args.$navigation;
-    var panelSpeed = args.panelSpeed; // The duration of panel slide-in/out
+    var panelSpeed = args.panelSpeed ? args.panelSpeed : 500; // The duration of panel slide-in/out
 
     var browser = {
       addPanel: function(args) {
@@ -265,7 +268,7 @@
           browser: browser,
           content: args.content,
           title: args.title,
-          duration: panelSpeed ? args.panelSpeed : 500
+          duration: panelSpeed
         });
 
         return browser;
@@ -279,7 +282,8 @@
           $navigation: $navigation,
           $targetPanel: $panel,
           browser: browser,
-          complete: complete
+          complete: complete,
+          duration: panelSpeed
         });
 
         return browser;
