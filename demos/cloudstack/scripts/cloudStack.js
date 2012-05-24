@@ -30,7 +30,7 @@
                 }
               });
             });
-            
+
             return $button;
           }
         },
@@ -69,7 +69,7 @@
         }
       }
     };
-    
+
     cloudStack._container = cloudUI.application($.extend(cloudStack, {
       $container: $('#container')
     }));

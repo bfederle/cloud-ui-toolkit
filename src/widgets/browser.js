@@ -46,7 +46,7 @@
     // Get new z-index for adding panel, for correct stacking
     zIndex: function(args) {
       var $container = args.$container;
-      var $panels = $container.find('.panel');
+      var $panels = panel.getAll($container);
 
       return $panels.size() ?
         parseInt($panels.filter(':last').css('z-index')) + 1 : 0;
@@ -80,6 +80,16 @@
         title: args.title
       });
       var zIndex, panelWidth, panelInitialPos;
+
+      // Setup nav item event behavior
+      cloudUI.event.register({
+        $elem: $navigationItem,
+        id: 'browser-navigation-item',
+        data: {
+          browser: browser,
+          $panel: $panel
+        }
+      });
 
       // Get initial positioning
       zIndex = panel.zIndex({ $container: $container });
@@ -142,7 +152,7 @@
     removeAll: function(args) {
       var $container = args.$container;
       var $navigation = args.$navigation;
-      var $panels = $container.find('.panel');
+      var $panels = panel.getAll($container);
 
       $panels.each(function() {
         var $panel = $(this);
@@ -153,6 +163,43 @@
           $container: $container
         });
       });
+    },
+
+    // Get every panel from container
+    getAll: function($container) {
+      return $container.find('.panel');
+    },
+
+    // Make target panel the last
+    // -- remove all panels/navigation after it
+    makeLast: function(args) {
+      var $container = args.$container;
+      var $navigation = args.$navigation;
+      var $targetPanel = args.$targetPanel;
+      var browser = args.browser;
+      var complete = args.complete;
+      var $removePanels;
+
+      // Get panels to remove
+      $removePanels = panel.getAll($container).filter(function() {
+        var $panel = $(this);
+
+        return $panel.index() > $targetPanel.index();
+      });
+
+      // Remove specified panels + navigation
+      $removePanels.each(function() {
+        var $panel = $(this);
+
+        panel.remove({
+          $panel: $panel,
+          $navigation: $navigation
+        });
+      });
+
+      if (complete) {
+        args.complete($targetPanel);
+      }
     }
   };
 
@@ -181,6 +228,18 @@
 
         return browser;
       },
+      selectPanel: function(args) {
+        var $panel = args.$panel;
+        var complete = args.complete;
+
+        panel.makeLast({
+          $container: $container,
+          $navigation: $navigation,
+          $targetPanel: $panel,
+          browser: browser,
+          complete: complete
+        });
+      },
       reset: function() {
         panel.removeAll({
           $container: $container,
@@ -198,4 +257,15 @@
 
     return browser;
   };
+
+  cloudUI.event.handler({
+    'browser-navigation-item': {
+      click: function(args) {
+        var browser = args.browser;
+        var $panel = args.$panel;
+
+        browser.selectPanel({ $panel: $panel });
+      }
+    }
+  });
 }(jQuery, cloudUI));
