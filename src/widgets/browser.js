@@ -281,12 +281,15 @@
           browser: browser,
           complete: complete
         });
+
+        return browser;
       },
       reset: function() {
         panel.removeAll({
           $container: $container,
           $navigation: $navigation
         });
+        
         return browser;
       }
     };

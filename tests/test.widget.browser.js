@@ -83,7 +83,7 @@
           title: 'test2',
           content: function($panel) {
             start();
-            browser.reset();
+            browser = browser.reset();
             equal($container.find('.panel').size(), 0, 'All panels cleared');
             equal($navigation.find('li, .end').size(), 0, 'All nav items cleared');
           }
@@ -101,13 +101,13 @@
     });
 
     stop();
-    browser.addPanel({
+    browser = browser.addPanel({
       title: 'test',
       content: function($panel1) {
         browser.addPanel({
           title: 'test2',
           content: function($panel2) {
-            browser.selectPanel({
+            browser = browser.selectPanel({
               $panel: $panel1,
               complete: function($lastPanel) {
                 start();
