@@ -57,12 +57,13 @@
     // Compute initial panel width, based on container's dimensions
     width: function(args) {
       var $container = args.$container;
+      var isMaximized = args.isMaximized;
       var width, containerWidth, panelCount;
 
       containerWidth = $container.width();
       panelCount = $container.find('.panel').size();
 
-      if (!panelCount) {
+      if (!panelCount || isMaximized) {
         // First panel is always full-sized
         width = containerWidth;
       } else {
@@ -88,12 +89,14 @@
     // Returns CSS 'left' attr in pixels
     visiblePosition: function(args) {
       var $container = args.$container;
+      var isMaximized = args.isMaximized;
       var $panel = args.$panel;
       var containerWidth, panelWidth;
 
       containerWidth = $container.width();
-      panelWidth = panel.width({ 
-       $container: $container
+      panelWidth = panel.width({
+       $container: $container,
+       isMaximized: isMaximized
       });
 
       return containerWidth - panelWidth;
@@ -110,6 +113,7 @@
         title: args.title
       });
       var $overlay = $('<div>').addClass('loading-overlay').css('opacity', 0);
+      var isMaximized = args.isMaximized;
       var zIndex, panelWidth, panelInitialPos, panelIndex;
 
       // Setup nav item event behavior
@@ -124,14 +128,18 @@
 
       // Get initial positioning
       zIndex = panel.zIndex({ $container: $container });
-      panelWidth = panel.width({ $container: $container });
+      panelWidth = panel.width({
+        $container: $container,
+        isMaximized: isMaximized
+      });
       panelInitialPos = panel.hiddenPosition({
         $container: $container,
         $panel: $panel
       });
       panelVisiblePos = panel.visiblePosition({
         $container: $container,
-        $panel: $panel
+        $panel: $panel,
+        isMaximized: isMaximized
       });
 
       $panel.css({
@@ -305,7 +313,9 @@
           browser: browser,
           content: args.content,
           title: args.title,
-          duration: panelSpeed
+          duration: panelSpeed,
+          isMaximized: args.maximizeIfSelected ?
+            args.maximizeIfSelected : args.isMaximized
         });
 
         return browser;

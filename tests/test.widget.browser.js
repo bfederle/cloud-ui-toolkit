@@ -153,4 +153,44 @@
       }
     });
   });
+
+  test('Add panel as maximized', function() {
+    var $container = $('<div>').appendTo('#qunit-fixture');
+    var $navigation = $('<div>');
+    var browser = cloudUI.widgets.browser({
+      $container: $container,
+      $navigation: $navigation
+    });
+
+    // Explictly set container width for testing panels
+    $container.width(1000);
+
+    stop();
+    browser.addPanel({
+      title: 'test',
+      content: function($panel1) {
+        browser.addPanel({
+          title: 'test2',
+          isMaximized: true,
+          content: function($panel2) {
+            start();
+            equal($panel2.width(), $container.width(), 'Panel width correct');
+            equal($panel2.position().left, 0, 'Panel position correct');
+            stop();
+
+            // Test legacy 'maximizeIfSelected' option
+            browser.addPanel({
+              title: 'test3',
+              maximizeIfSelected: true,
+              content: function($panel3) {
+                start();
+                equal($panel3.width(), $container.width(), 'Panel width correct');
+                equal($panel3.position().left, 0, 'Panel position correct');
+              }
+            });
+          }
+        });
+      }
+    });
+  });
 }(jQuery, cloudUI));
