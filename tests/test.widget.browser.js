@@ -44,6 +44,7 @@
         equal($container.find('.panel').size(), 1, 'Panel added');
         equal($container.find('.panel > div.shadow').size(), 1, 'Panel has shadow');
         equal($container.find('.panel > div.testContents').html(), 'test contents', 'Panel has contents');
+        equal($panel1.width(), $container.width(), 'Panel 1 width correct');
         stop();
 
         browser.addPanel({
@@ -60,7 +61,7 @@
             equal($container.find('.panel').size(), 2, 'Second panel added');
             equal($container.find('.panel:last > div.testContents2').html(), 'test contents 2', 'Second panel has contents');
             equal(zIndexPanel2, zIndexPanel1 + 1, 'Z-index correct');
-            equal($panel2.width(), $container.width(), 'Width correct');
+            equal($panel2.width(), $container.width() - $container.width() / 4, 'Panel 2 width correct');
           }
         });
       }
