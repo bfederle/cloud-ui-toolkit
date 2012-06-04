@@ -57,8 +57,20 @@
     // Compute initial panel width, based on container's dimensions
     width: function(args) {
       var $container = args.$container;
+      var width, containerWidth, panelCount;
 
-      return $container.width();
+      containerWidth = $container.width();
+      panelCount = $container.find('.panel').size();
+
+      if (!panelCount) {
+        // First panel is always full-sized
+        width = containerWidth;
+      } else {
+        // Partial size
+        width = containerWidth - containerWidth / 4
+      }
+
+      return width;
     },
 
     // Compute initial position of hidden panel
@@ -69,6 +81,22 @@
       var $panel = args.$panel;
 
       return $container.width();
+    },
+
+    // Compute position of panel in visible position
+    //
+    // Returns CSS 'left' attr in pixels
+    visiblePosition: function(args) {
+      var $container = args.$container;
+      var $panel = args.$panel;
+      var containerWidth, panelWidth;
+
+      containerWidth = $container.width();
+      panelWidth = panel.width({ 
+       $container: $container
+      });
+
+      return containerWidth - panelWidth;
     },
 
     // Append new panel to browser
@@ -101,6 +129,11 @@
         $container: $container,
         $panel: $panel
       });
+      panelVisiblePos = panel.visiblePosition({
+        $container: $container,
+        $panel: $panel
+      });
+
       $panel.css({
         zIndex: zIndex,
         left: panelInitialPos
@@ -121,7 +154,7 @@
         $overlay.appendTo($container); // Prevent clicks while animating
         $panel.animate(
           {
-            left: 0
+            left: panelVisiblePos
           },
           {
             duration: duration,
