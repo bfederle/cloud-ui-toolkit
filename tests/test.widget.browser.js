@@ -154,6 +154,39 @@
     });
   });
 
+  test('Select panel by index', function() {
+    var $container = $('<div>').appendTo('#qunit-fixture');
+    var $navigation = $('<div>').appendTo('#qunit-fixture');
+    var browser = cloudUI.widgets.browser({
+      $container: $container,
+      $navigation: $navigation
+    });
+
+    stop();
+    browser = browser.addPanel({
+      title: 'test',
+      content: function($panel1) {
+        browser.addPanel({
+          title: 'test2',
+          content: function($panel2) {
+            browser = browser.selectPanel({
+              index: 1,
+              complete: function($lastPanel) {
+                start();
+                equal($container.find('.panel').size(), 1, 'Correct # of panels');
+                equal($navigation.find('li').size(), 1, 'Correct # of nav items');
+                equal($navigation.find('ul .end').size(), 1, 'Correct # of nav item ends');
+                equal($panel1[0], $lastPanel[0], 'Correct last panel');
+                ok($panel1.is(':visible'), '$panel1 visible');
+                ok(!$panel2.is(':visible'), '$panel2 not visible');
+              }
+            });
+          }
+        });
+      }
+    });
+  });
+
   test('Add panel as maximized', function() {
     var $container = $('<div>').appendTo('#qunit-fixture');
     var $navigation = $('<div>');

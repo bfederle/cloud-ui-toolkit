@@ -249,6 +249,16 @@
       return $container.find('.panel');
     },
 
+    // Get panel by index (starting at 1)
+    getByIndex: function(index, $container) {
+      var $panels = panel.getAll($container);
+      var $panel = $panels.filter(function() {
+        return $(this).index() == index;
+      });
+
+      return $panel;
+    },
+
     // Make target panel the last
     // -- remove all panels/navigation after it
     makeLast: function(args) {
@@ -322,7 +332,13 @@
       },
       selectPanel: function(args) {
         var $panel = args.$panel;
+        var index = args.index ? args.index - 1 : 0; // Index in options starts at 1
         var complete = args.complete;
+
+        if (!$panel) {
+          // Get panel from index
+          $panel = panel.getByIndex(index, $container);
+        }
 
         panel.makeLast({
           $container: $container,

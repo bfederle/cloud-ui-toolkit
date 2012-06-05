@@ -25,6 +25,7 @@
             $button.click(function() {
               cloudStack._container.widgets.browser.addPanel({
                 title: testText,
+                isMaximized: true,
                 content: function($panel) {
                   $panel.append(cloudStack.sections.dashboard.content);
                 }
