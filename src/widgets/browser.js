@@ -68,7 +68,7 @@
         width = containerWidth;
       } else {
         // Partial size
-        width = containerWidth - containerWidth / 4
+        width = containerWidth - containerWidth / 4;
       }
 
       return width;
