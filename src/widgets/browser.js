@@ -14,7 +14,7 @@
       var $panel = $('<div>').addClass('panel');
       var $shadow = $('<div>').addClass('shadow');
 
-      // For consistency, width and positoning computation is handled directly in JS
+      // For consistency, width and positioning computation is handled directly in JS
       $panel.css({
         position: 'absolute'
       });
@@ -79,7 +79,6 @@
     // Returns CSS 'left' attr in pixels
     hiddenPosition: function(args) {
       var $container = args.$container;
-      var $panel = args.$panel;
 
       return $container.width();
     },
@@ -90,7 +89,6 @@
     visiblePosition: function(args) {
       var $container = args.$container;
       var isMaximized = args.isMaximized;
-      var $panel = args.$panel;
       var containerWidth, panelWidth;
 
       containerWidth = $container.width();
@@ -252,11 +250,10 @@
     // Get panel by index (starting at 1)
     getByIndex: function(index, $container) {
       var $panels = panel.getAll($container);
-      var $panel = $panels.filter(function() {
+
+      return $panels.filter(function() {
         return $(this).index() == index;
       });
-
-      return $panel;
     },
 
     // Make target panel the last
@@ -265,7 +262,6 @@
       var $container = args.$container;
       var $navigation = args.$navigation;
       var $targetPanel = args.$targetPanel;
-      var browser = args.browser;
       var complete = args.complete;
       var $removePanels, removePanelTotal, removePanelCurrent;
       var duration = args.duration;
@@ -304,7 +300,6 @@
   };
 
   var makeNavigation = function(args) {
-    var browser = args.browser;
     var $navigation = args.$navigation;
 
     $navigation.append($('<ul>'));
