@@ -112,7 +112,7 @@
       });
       var $overlay = $('<div>').addClass('loading-overlay').css('opacity', 0);
       var isMaximized = args.isMaximized;
-      var zIndex, panelWidth, panelInitialPos, panelIndex;
+      var zIndex, panelWidth, panelInitialPos, panelVisiblePos, panelIndex;
 
       // Setup nav item event behavior
       cloudUI.event.register({
