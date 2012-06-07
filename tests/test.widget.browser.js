@@ -101,7 +101,7 @@
       $container: $container,
       $navigation: $navigation
     });
-    var $panel1, $panel2, $panel3, $lastPanel;
+    var $panel1, $panel2, $panel3, $panel4, $lastPanel;
 
     stop();
     browser = browser.addPanel({
@@ -111,6 +111,10 @@
     browser.addPanel({
       title: 'test2',
       content: function($panel) { $panel2 = $panel; }
+    });
+    browser.addPanel({
+      title: 'test3',
+      content: function($panel) { $panel4 = $panel; }
     });
     browser = browser.selectPanel({
       $panel: $panel1,
@@ -128,7 +132,7 @@
         // Test via breadcrumb click
         stop();
         browser.addPanel({
-          title: 'test3',
+          title: 'test4',
           content: function($panel3) {
             start();
             ok($panel1.is(':visible'), '$panel1 visible');
@@ -284,5 +288,11 @@
     ok($panel1.is(':visible'), 'Panel 1 visible');
     ok($panel2.is(':hidden'), 'Panel 2 hidden');
     ok($panel3.is(':hidden'), 'Panel 3 hidden');
+
+    // Test select while focused
+    browser.selectPanel({ index: 1 });
+    browser.defocusPanel();
+    equal($container.find('.panel').size(), 1, 'Panel count correct');
+    ok(!$panel3.parent().size(), 'Panel 3 removed'); // Panel is not part of container
   });
 }(jQuery, cloudUI));

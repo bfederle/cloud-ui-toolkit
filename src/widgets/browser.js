@@ -188,6 +188,7 @@
           duration: slideOutDuration,
           complete: function() {
             $panel.remove();
+            navigation.removeItem($navigationItem);
 
             if (complete) complete();
           }
@@ -207,10 +208,10 @@
       var $panels = panel.getAll($container);
 
       $panels.each(function() {
-        var $panel = $(this);
+        var $thisPanel = $(this);
 
         panel.remove({
-          $panel: $panel,
+          $panel: $thisPanel,
           $navigation: $navigation,
           $container: $container
         });
@@ -254,10 +255,10 @@
       removePanelTotal = $removePanels.size();
       removePanelCurrent = 0;
       $removePanels.each(function() {
-        var $panel = $(this);
+        var $thisPanel = $(this);
 
         panel.remove({
-          $panel: $panel,
+          $panel: $thisPanel,
           $navigation: $navigation,
           $container: $container,
           animate: true,
@@ -288,30 +289,36 @@
         $panel: $panel,
         isMaximized: $panel.width() == $container.width()
       });
-      
+
       if (useOverlay) $overlay.appendTo($container); // Prevent clicks while animating
 
-      $panel.show();
-      $panel.animate(
-        {
-          left: panelVisiblePos
-        },
-        {
-          duration: duration,
-          easing: 'easeOutCirc',
-          complete: function() {
-            $overlay.remove();
+      if ($panel.is(':visible')) {
+        $panel.animate(
+          {
+            left: panelVisiblePos
+          },
+          {
+            duration: duration,
+            easing: 'easeOutCirc',
+            complete: function() {
+              $overlay.remove();
 
-            if (!$panel.is(':visible')) {
-              return false;
+              if (!$panel.is(':visible')) {
+                return false;
+              }
+
+              if (complete) args.complete();
+
+              return true;
             }
-
-            if (complete) args.complete();
-
-            return true;
           }
-        }
-      );
+        );
+      } else {
+        $overlay.remove();
+        $panel.hide();
+
+        if (complete) complete();
+      }
     },
 
     // Animated slide-out
@@ -321,22 +328,28 @@
       var complete = args.complete;
       var duration = args.duration;
 
-      $panel.animate(
-        {
-          left: panel.hiddenPosition({
-            $container: $container,
-            $panel: $panel
-          })
-        },
-        {
-          duration: duration,
-          easing: 'easeOutCirc',
-          complete: function() {
-            $panel.hide();
-            if (complete) complete();
+      if ($panel.is(':visible')) {
+        $panel.animate(
+          {
+            left: panel.hiddenPosition({
+              $container: $container,
+              $panel: $panel
+            })
+          },
+          {
+            duration: duration,
+            easing: 'easeOutCirc',
+            complete: function() {
+              $panel.hide();
+
+              if (complete) complete();
+            }
           }
-        }
-      );
+        );
+      } else {
+        $panel.hide();
+        if (complete) complete();
+      }
     },
     hideOthers: function(args) {
       var $panel = args.$panel;
@@ -352,33 +365,14 @@
       });
 
       $panel.show();
-
-      // Check if panel needs a slide-in
-      if ($panel.index() >= $panel.index() &&
-          $panel.position().left != panelVisiblePos) {
-        panel.slideIn({
-          $panel: $panel,
-          $container: $container,
-          duration: 500
-        });
-      }
-
-      panel.slideOut({
-        $panel: $hidePanels,
-        $container: $container,
-        duration: duration
-      });
+      $hidePanels.fadeOut();
     },
     showAll: function(args) {
       var $container = args.$container;
       var $panels = $container.find('.panel');
       var duration = args.duration;
 
-      panel.slideIn({
-        $panel: $panels,
-        $container: $container,
-        duration: duration
-      });
+      $panels.show();
     }
   };
 
@@ -479,6 +473,27 @@
         var $panel = args.$panel;
 
         browser.selectPanel({ $panel: $panel });
+      },
+      mouseover: function(args) {
+        var browser = args.browser;
+        var $panel = args.$panel;
+
+        if ($panel.hasClass('focused')) return;
+
+        $panel.addClass('focused');
+
+        setTimeout(function() {
+          if ($panel.hasClass('focused')) {
+            browser.focusPanel({ $panel: $panel });
+          }
+        }, 700); // Delay until panel is focused
+      },
+      mouseout: function(args) {
+        var browser = args.browser;
+        var $panel = args.$panel;
+
+        $panel.parent().find('.panel').removeClass('focused');
+        browser.defocusPanel();
       }
     }
   });
