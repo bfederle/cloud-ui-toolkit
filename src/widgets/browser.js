@@ -110,7 +110,6 @@
       var $navigationItem = elems.navigationItem({
         title: args.title
       });
-      var $overlay = $('<div>').addClass('loading-overlay').css('opacity', 0);
       var isMaximized = args.isMaximized;
       var zIndex, panelWidth, panelInitialPos, panelVisiblePos, panelIndex;
 
@@ -134,11 +133,6 @@
         $container: $container,
         $panel: $panel
       });
-      panelVisiblePos = panel.visiblePosition({
-        $container: $container,
-        $panel: $panel,
-        isMaximized: isMaximized
-      });
 
       $panel.css({
         zIndex: zIndex,
@@ -157,27 +151,14 @@
 
       // Slide-in panel
       if (panelIndex) {
-        $overlay.appendTo($container); // Prevent clicks while animating
-        $panel.animate(
-          {
-            left: panelVisiblePos
-          },
-          {
-            duration: duration,
-            easing: 'easeOutCirc',
-            complete: function() {
-              $overlay.remove();
-
-              if (!$panel.is(':visible')) {
-                return false;
-              }
-
-              args.content($panel);
-
-              return true;
-            }
+        panel.slideIn({
+          $panel: $panel,
+          $container: $container,
+          duration: duration,
+          complete: function() {
+            args.content($panel);
           }
-        );
+        });
       } else {
         $panel.css({ left: 0 });
         args.content($panel);
@@ -200,23 +181,16 @@
       if (animate) {
         $navigationItem.remove();
 
-        $panel.animate(
-          {
-            left: panel.hiddenPosition({
-              $container: $container,
-              $panel: $panel
-            })
-          },
-          {
-            duration: slideOutDuration,
-            easing: 'easeOutCirc',
-            complete: function() {
-              $panel.remove();
+        panel.slideOut({
+          $panel: $panel,
+          $container: $container,
+          duration: slideOutDuration,
+          complete: function() {
+            $panel.remove();
 
-              if (complete) complete();
-            }
+            if (complete) complete();
           }
-        );
+        });
       } else {
         $panel.remove();
         navigation.removeItem($navigationItem);
@@ -297,20 +271,110 @@
         });
       });
     },
+
+    // Animated slide-in
+    slideIn: function(args) {
+      var $panel = args.$panel;
+      var $container = args.$container;
+      var $overlay = $('<div>').addClass('loading-overlay').css('opacity', 0);
+      var duration = args.duration;
+      var complete = args.complete;
+      var panelVisiblePos;
+
+      panelVisiblePos = panel.visiblePosition({
+        $container: $container,
+        $panel: $panel,
+        isMaximized: $panel.width() == $container.width()
+      });
+      $overlay.appendTo($container); // Prevent clicks while animating
+      $panel.show();
+      $panel.animate(
+        {
+          left: panelVisiblePos
+        },
+        {
+          duration: duration,
+          easing: 'easeOutCirc',
+          complete: function() {
+            $overlay.remove();
+
+            if (!$panel.is(':visible')) {
+              return false;
+            }
+
+            if (complete) args.complete();
+
+            return true;
+          }
+        }
+      );
+    },
+
+    // Animated slide-out
+    slideOut: function(args) {
+      var $panel = args.$panel;
+      var $container = args.$container;
+      var complete = args.complete;
+      var duration = args.duration;
+
+      $panel.animate(
+        {
+          left: panel.hiddenPosition({
+            $container: $container,
+            $panel: $panel
+          })
+        },
+        {
+          duration: duration,
+          easing: 'easeOutCirc',
+          complete: function() {
+            $panel.hide();
+            if (complete) complete();
+          }
+        }
+      );
+    },
     hideOthers: function(args) {
       var $panel = args.$panel;
       var $container = args.$container;
       var $otherPanels = $panel.siblings();
+      var duration = args.duration;
       var $hidePanels = $otherPanels.filter(function() {
         return $(this).index() > $panel.index();
+      });      
+      var panelVisiblePos = panel.visiblePosition({
+        $container: $container,
+        isMaximized: $panel.width() == $container.width()
       });
+      
+      $panel.show();
 
-      $hidePanels.hide();
+      // Check if panel needs a slide-in
+      if ($panel.index() >= $panel.index() &&
+          $panel.position().left != panelVisiblePos) {
+        panel.slideIn({
+          $panel: $panel,
+          $container: $container,
+          duration: 500
+        });
+      }
+
+      panel.slideOut({
+        $panel: $hidePanels,
+        $container: $container,
+        duration: duration
+      });
     },
     showAll: function(args) {
       var $container = args.$container;
+      var $panels = $container.find('.panel');
+      var duration = args.duration;
 
-      $container.find('.panel').show();
+      panel.slideIn({
+        $panel: $panels,
+        $container: $container,
+        duration: duration
+      });
     }
   };
 
@@ -372,23 +436,25 @@
       focusPanel: function(args) {
         var $panel = args.$panel;
         var index = args.index ? args.index - 1 : 0; // Index in options starts at 1
+        var slideInDuration = args.slideInDuration;
 
         if (!$panel) {
           // Get panel from index
           $panel = panel.getByIndex(index, $container);
-        }        
+        }
 
-        $panel.show();
         panel.hideOthers({
           $panel: $panel,
-          $container: $container
+          $container: $container,
+          duration: panelSpeed
         });
       },
 
       // Defocuses any currently focused panel
       defocusPanel: function() {
         panel.showAll({
-          $container: $container
+          $container: $container,
+          duration: panelSpeed
         });
       }
     };

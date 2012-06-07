@@ -268,6 +268,10 @@
     ok($panel2.is(':visible'), 'Panel 2 visible');
     ok($panel3.is(':hidden'), 'Panel 3 hidden');
 
+    // Test panel positioning
+    equal($panel1.position().left, 0, 'Panel 1 position correct');
+    notEqual($panel2.position().left, $container.width(), 'Panel 2 position correct');
+
     browser.defocusPanel();
 
     ok($panel1.is(':visible'), 'Panel 1 visible');
