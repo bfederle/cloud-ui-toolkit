@@ -296,6 +296,21 @@
           }
         });
       });
+    },
+    hideOthers: function(args) {
+      var $panel = args.$panel;
+      var $container = args.$container;
+      var $otherPanels = $panel.siblings();
+      var $hidePanels = $otherPanels.filter(function() {
+        return $(this).index() > $panel.index();
+      });
+
+      $hidePanels.hide();
+    },
+    showAll: function(args) {
+      var $container = args.$container;
+
+      $container.find('.panel').show();
     }
   };
 
@@ -353,6 +368,28 @@
         });
 
         return browser;
+      },
+      focusPanel: function(args) {
+        var $panel = args.$panel;
+        var index = args.index ? args.index - 1 : 0; // Index in options starts at 1
+
+        if (!$panel) {
+          // Get panel from index
+          $panel = panel.getByIndex(index, $container);
+        }        
+
+        $panel.show();
+        panel.hideOthers({
+          $panel: $panel,
+          $container: $container
+        });
+      },
+
+      // Defocuses any currently focused panel
+      defocusPanel: function() {
+        panel.showAll({
+          $container: $container
+        });
       }
     };
 

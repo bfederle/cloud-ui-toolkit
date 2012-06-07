@@ -116,7 +116,7 @@
       $panel: $panel1,
       complete: function($panel) {
         $lastPanel = $panel;
-        
+
         start();
         equal($container.find('.panel').size(), 1, 'Correct # of panels');
         equal($navigation.find('li').size(), 1, 'Correct # of nav items');
@@ -215,7 +215,7 @@
         stop();
       }
     });
-    
+
     // Test legacy 'maximizeIfSelected' option
     browser.addPanel({
       title: 'test3',
@@ -226,5 +226,59 @@
         equal($panel3.position().left, 0, 'Panel position correct');
       }
     });
+  });
+
+  test('Focus panel', function() {
+    var $container = $('<div>').appendTo('#qunit-fixture');
+    var $navigation = $('<div>');
+    var browser = cloudUI.widgets.browser({
+      $container: $container,
+      $navigation: $navigation
+    });
+    var $panel1, $panel2, $panel3;
+
+    browser.addPanel({
+      title: 'test1',
+      content: function($panel) {
+        $panel1 = $panel;
+      }
+    });
+    browser.addPanel({
+      title: 'test2',
+      content: function($panel) {
+        $panel2 = $panel;
+      }
+    });
+    browser.addPanel({
+      title: 'test3',
+      content: function($panel) {
+        $panel3 = $panel;
+      }
+    });
+
+    browser.focusPanel({ $panel: $panel1 });
+
+    ok($panel1.is(':visible'), 'Panel 1 visible');
+    ok($panel2.is(':hidden'), 'Panel 2 hidden');
+    ok($panel3.is(':hidden'), 'Panel 3 hidden');
+
+    browser.focusPanel({ $panel: $panel2 });
+
+    ok($panel1.is(':visible'), 'Panel 1 still visible');
+    ok($panel2.is(':visible'), 'Panel 2 visible');
+    ok($panel3.is(':hidden'), 'Panel 3 hidden');
+
+    browser.defocusPanel();
+
+    ok($panel1.is(':visible'), 'Panel 1 visible');
+    ok($panel2.is(':visible'), 'Panel 2 visible');
+    ok($panel3.is(':visible'), 'Panel 3 visible');
+
+    // Test focus by index
+    browser.focusPanel({ index: 1 });
+
+    ok($panel1.is(':visible'), 'Panel 1 visible');
+    ok($panel2.is(':hidden'), 'Panel 2 hidden');
+    ok($panel3.is(':hidden'), 'Panel 3 hidden');
   });
 }(jQuery, cloudUI));
