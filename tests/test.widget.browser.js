@@ -21,6 +21,7 @@
       $container: $container,
       $navigation: $navigation
     });
+    var zIndexPanel1, zIndexPanel2;
 
     // Explictly set container width for testing panels
     $container.width(1000);
@@ -29,7 +30,7 @@
     browser.addPanel({
       title: 'test',
       content: function($panel1) {
-        var zIndexPanel1 = parseInt($panel1.css('z-index'));
+        zIndexPanel1 = parseInt($panel1.css('z-index'));
 
         $panel1.append(
           $('<div>').addClass('testContents').html('test contents')
@@ -46,26 +47,26 @@
         equal($container.find('.panel > div.testContents').html(), 'test contents', 'Panel has contents');
         equal($panel1.width(), $container.width(), 'Panel 1 width correct');
         stop();
-
-        browser.addPanel({
-          title: 'test2',
-          content: function($panel2) {
-            var zIndexPanel2 = parseInt($panel2.css('z-index'));
-
-            $panel2.append(
-              $('<div>').addClass('testContents2').html('test contents 2')
-            );
-
-            start();
-            equal($navigation.find('ul li').size(), 2, 'Second navigation item added');
-            equal($container.find('.panel').size(), 2, 'Second panel added');
-            equal($container.find('.panel:last > div.testContents2').html(), 'test contents 2', 'Second panel has contents');
-            equal(zIndexPanel2, zIndexPanel1 + 1, 'Z-index correct');
-            equal($panel2.width(), $container.width() - $container.width() / 4, 'Panel 2 width correct');
-          }
-        });
       }
     });
+    browser.addPanel({
+      title: 'test2',
+      content: function($panel2) {
+        zIndexPanel2 = parseInt($panel2.css('z-index'));
+
+        $panel2.append(
+          $('<div>').addClass('testContents2').html('test contents 2')
+        );
+
+        start();
+        equal($navigation.find('ul li').size(), 2, 'Second navigation item added');
+        equal($container.find('.panel').size(), 2, 'Second panel added');
+        equal($container.find('.panel:last > div.testContents2').html(), 'test contents 2', 'Second panel has contents');
+        equal(zIndexPanel2, zIndexPanel1 + 1, 'Z-index correct');
+        equal($panel2.width(), $container.width() - $container.width() / 4, 'Panel 2 width correct');
+      }
+    });
+
   });
 
   test('Reset', function() {
@@ -100,53 +101,54 @@
       $container: $container,
       $navigation: $navigation
     });
+    var $panel1, $panel2, $panel3, $lastPanel;
 
     stop();
     browser = browser.addPanel({
       title: 'test',
-      content: function($panel1) {
+      content: function($panel) { $panel1 = $panel; }
+    });
+    browser.addPanel({
+      title: 'test2',
+      content: function($panel) { $panel2 = $panel; }
+    });
+    browser = browser.selectPanel({
+      $panel: $panel1,
+      complete: function($panel) {
+        $lastPanel = $panel;
+        
+        start();
+        equal($container.find('.panel').size(), 1, 'Correct # of panels');
+        equal($navigation.find('li').size(), 1, 'Correct # of nav items');
+        equal($navigation.find('ul .end').size(), 1, 'Correct # of nav item ends');
+        equal($panel1[0], $lastPanel[0], 'Correct last panel');
+        ok($panel1.is(':visible'), '$panel1 visible');
+        ok(!$panel2.is(':visible'), '$panel2 not visible');
+
+        // Test via breadcrumb click
+        stop();
         browser.addPanel({
-          title: 'test2',
-          content: function($panel2) {
-            browser = browser.selectPanel({
-              $panel: $panel1,
-              complete: function($lastPanel) {
-                start();
-                equal($container.find('.panel').size(), 1, 'Correct # of panels');
-                equal($navigation.find('li').size(), 1, 'Correct # of nav items');
-                equal($navigation.find('ul .end').size(), 1, 'Correct # of nav item ends');
-                equal($panel1[0], $lastPanel[0], 'Correct last panel');
-                ok($panel1.is(':visible'), '$panel1 visible');
-                ok(!$panel2.is(':visible'), '$panel2 not visible');
+          title: 'test3',
+          content: function($panel3) {
+            start();
+            ok($panel1.is(':visible'), '$panel1 visible');
+            ok($panel3.is(':visible'), '$panel3 visible');
+            equal($container.find('.panel').size(), 2, 'Correct # of panels');
+            equal($navigation.find('li').size(), 2, 'Correct # of nav items');
 
-                // Test via breadcrumb click
-                stop();
-                browser.addPanel({
-                  title: 'test3',
-                  content: function($panel3) {
-                    start();
-                    ok($panel1.is(':visible'), '$panel1 visible');
-                    ok($panel3.is(':visible'), '$panel3 visible');
-                    equal($container.find('.panel').size(), 2, 'Correct # of panels');
-                    equal($navigation.find('li').size(), 2, 'Correct # of nav items');
+            $navigation.find('li:first').click();
 
-                    $navigation.find('li:first').click();
+            stop();
 
-                    stop();
-
-                    // Panel selection is animated
-                    setTimeout(function() {
-                      start();
-                      equal($container.find('.panel').size(), 1, 'Correct # of panels');
-                      equal($navigation.find('li').size(), 1, 'Correct # of nav items');
-                      equal($navigation.find('ul .end').size(), 1, 'Correct # of nav item ends');
-                      ok($panel1.is(':visible'), '$panel1 visible');
-                      ok(!$panel2.is(':visible'), '$panel2 not visible');
-                      ok(!$panel3.is(':visible'), '$panel3 not visible');
-                    });
-                  }
-                });
-              }
+            // Panel selection is animated
+            setTimeout(function() {
+              start();
+              equal($container.find('.panel').size(), 1, 'Correct # of panels');
+              equal($navigation.find('li').size(), 1, 'Correct # of nav items');
+              equal($navigation.find('ul .end').size(), 1, 'Correct # of nav item ends');
+              ok($panel1.is(':visible'), '$panel1 visible');
+              ok(!$panel2.is(':visible'), '$panel2 not visible');
+              ok(!$panel3.is(':visible'), '$panel3 not visible');
             });
           }
         });
@@ -161,28 +163,28 @@
       $container: $container,
       $navigation: $navigation
     });
+    var $panel1, $panel2, $lastPanel;
 
     stop();
     browser = browser.addPanel({
       title: 'test',
-      content: function($panel1) {
-        browser.addPanel({
-          title: 'test2',
-          content: function($panel2) {
-            browser = browser.selectPanel({
-              index: 1,
-              complete: function($lastPanel) {
-                start();
-                equal($container.find('.panel').size(), 1, 'Correct # of panels');
-                equal($navigation.find('li').size(), 1, 'Correct # of nav items');
-                equal($navigation.find('ul .end').size(), 1, 'Correct # of nav item ends');
-                equal($panel1[0], $lastPanel[0], 'Correct last panel');
-                ok($panel1.is(':visible'), '$panel1 visible');
-                ok(!$panel2.is(':visible'), '$panel2 not visible');
-              }
-            });
-          }
-        });
+      content: function($panel) { $panel1 = $panel; }
+    });
+    browser.addPanel({
+      title: 'test2',
+      content: function($panel) { $panel2 = $panel; }
+    });
+    browser = browser.selectPanel({
+      index: 1,
+      complete: function($panel) {
+        $lastPanel = $panel;
+        start();
+        equal($container.find('.panel').size(), 1, 'Correct # of panels');
+        equal($navigation.find('li').size(), 1, 'Correct # of nav items');
+        equal($navigation.find('ul .end').size(), 1, 'Correct # of nav item ends');
+        equal($panel1[0], $lastPanel[0], 'Correct last panel');
+        ok($panel1.is(':visible'), '$panel1 visible');
+        ok(!$panel2.is(':visible'), '$panel2 not visible');
       }
     });
   });
@@ -201,28 +203,27 @@
     stop();
     browser.addPanel({
       title: 'test',
-      content: function($panel1) {
-        browser.addPanel({
-          title: 'test2',
-          isMaximized: true,
-          content: function($panel2) {
-            start();
-            equal($panel2.width(), $container.width(), 'Panel width correct');
-            equal($panel2.position().left, 0, 'Panel position correct');
-            stop();
-
-            // Test legacy 'maximizeIfSelected' option
-            browser.addPanel({
-              title: 'test3',
-              maximizeIfSelected: true,
-              content: function($panel3) {
-                start();
-                equal($panel3.width(), $container.width(), 'Panel width correct');
-                equal($panel3.position().left, 0, 'Panel position correct');
-              }
-            });
-          }
-        });
+      content: function($panel1) {}
+    });
+    browser.addPanel({
+      title: 'test2',
+      isMaximized: true,
+      content: function($panel2) {
+        start();
+        equal($panel2.width(), $container.width(), 'Panel width correct');
+        equal($panel2.position().left, 0, 'Panel position correct');
+        stop();
+      }
+    });
+    
+    // Test legacy 'maximizeIfSelected' option
+    browser.addPanel({
+      title: 'test3',
+      maximizeIfSelected: true,
+      content: function($panel3) {
+        start();
+        equal($panel3.width(), $container.width(), 'Panel width correct');
+        equal($panel3.position().left, 0, 'Panel position correct');
       }
     });
   });
