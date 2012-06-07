@@ -154,6 +154,7 @@
         panel.slideIn({
           $panel: $panel,
           $container: $container,
+          useOverlay: true,
           duration: duration,
           complete: function() {
             args.content($panel);
@@ -280,13 +281,16 @@
       var duration = args.duration;
       var complete = args.complete;
       var panelVisiblePos;
+      var useOverlay = args.useOverlay;
 
       panelVisiblePos = panel.visiblePosition({
         $container: $container,
         $panel: $panel,
         isMaximized: $panel.width() == $container.width()
       });
-      $overlay.appendTo($container); // Prevent clicks while animating
+      
+      if (useOverlay) $overlay.appendTo($container); // Prevent clicks while animating
+
       $panel.show();
       $panel.animate(
         {
@@ -341,12 +345,12 @@
       var duration = args.duration;
       var $hidePanels = $otherPanels.filter(function() {
         return $(this).index() > $panel.index();
-      });      
+      });
       var panelVisiblePos = panel.visiblePosition({
         $container: $container,
         isMaximized: $panel.width() == $container.width()
       });
-      
+
       $panel.show();
 
       // Check if panel needs a slide-in
