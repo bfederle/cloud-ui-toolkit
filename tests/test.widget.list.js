@@ -44,4 +44,41 @@
     equal($list.find('.data-table .fixed-header table thead tr th.fieldA').size(), 1, 'Header has field A');
     equal($list.find('.data-table .fixed-header table thead tr th.fieldB').size(), 1, 'Header has field B');
   });
+
+  test('Data provider', function() {
+    var $list = $('<div>');
+    var list;
+
+    list = cloudUI.widgets.list({
+      $list: $list,
+      id: 'testList',
+      fields: {
+        fieldA: { label: 'fieldALabel' },
+        fieldB: { label: 'fieldBLabel' }
+      },
+      dataProvider: function(args) {
+        args.response.success({
+          data: [
+            { fieldA: 'fieldAData1', fieldB: 'fieldBData1' },
+            { fieldA: 'fieldAData2', fieldB: 'fieldBData2' }
+          ]
+        });
+      }
+    });
+
+    equal($list.find('.data-table table.body tr').size(), 2, 'Correct number of rows present');
+    equal($list.find('.data-table table.body tr:first td').size(), 2, '<td> count matches header count');
+
+    // Row 1
+    equal($list.find('.data-table table.body tr:first td.fieldA').size(), 1, 'fieldA present on row 1');
+    equal($list.find('.data-table table.body tr:first td.fieldA span').html(), 'fieldAData1', 'fieldA data present on row 1');
+    equal($list.find('.data-table table.body tr:first td.fieldB').size(), 1, 'fieldA present on row 1');
+    equal($list.find('.data-table table.body tr:first td.fieldB span').html(), 'fieldBData1', 'fieldA data present on row 1');
+
+    // Row 2
+    equal($list.find('.data-table table.body tr:last td.fieldA').size(), 1, 'fieldA present on row 2');
+    equal($list.find('.data-table table.body tr:last td.fieldA span').html(), 'fieldAData2', 'fieldA data present on row 2');
+    equal($list.find('.data-table table.body tr:last td.fieldB').size(), 1, 'fieldA present on row 2');
+    equal($list.find('.data-table table.body tr:last td.fieldB span').html(), 'fieldBData2', 'fieldA data present on row 2');
+  });
 }(jQuery, cloudUI));

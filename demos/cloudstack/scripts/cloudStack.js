@@ -30,8 +30,23 @@
                 name: { label: 'Name' },
                 account: { label: 'Account' },
                 zone: { label: 'Zone' },
-                status: { label: 'Status' },
-                actions: { label: 'Actions' }
+                status: { label: 'Status' }
+              },
+              dataProvider: function(args) {
+                var data = [];
+
+                for (var i = 1; i <= 100; i++) {
+                  data.push({
+                    name: 'i-' + i + '-VM',
+                    account: 'brian',
+                    zone: 'Zone 1',
+                    status: 'Enabled'
+                  });
+                }
+
+                setTimeout(function() {
+                  args.response.success({ data: data });
+                }, 500);
               }
             });
 
