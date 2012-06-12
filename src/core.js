@@ -50,6 +50,25 @@
     }
   };
 
+  // Handler for dataProvider, to maintain consistency for data retrieval
+  cloudUI.dataProvider = function(args) {
+    var dataProvider = args.dataProvider;
+    var success = args.success;
+    var error = args.error;
+
+    dataProvider({
+      context: [],
+      response: {
+        success: function(args) {
+          success(args);
+        },
+        error: function(args) {
+          error(args);
+        }
+      }
+    });
+  };
+
   // Holds widget factories
   cloudUI.widgets = {};
 }(jQuery));

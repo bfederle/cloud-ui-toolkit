@@ -59,4 +59,33 @@
     stop();
     $elem.click();
   });
+
+  test('dataProvider handler', function() {
+    var dataProvider = function(args) {
+      start();
+
+      ok(true, 'Data provider called');
+      ok($.isArray(args.context), 'Context passed');
+      ok(args.response.success, 'Success callback passed');
+      ok(args.response.error, 'Error callback passed');
+
+      stop();
+
+      args.response.success({ data: [ { testItem: 'testItemData' } ] });
+    };
+
+    stop();
+
+    cloudUI.dataProvider({
+      dataProvider: dataProvider,
+      success: function(args) {
+        start();
+
+        ok(true, 'Success called');
+        ok(args.data.length, 1, 'Data passed');
+        equal(args.data[0].testItem, 'testItemData', 'Data values correct');
+      },
+      error: function(args) {}
+    });
+  });
 }(jQuery, cloudUI));
