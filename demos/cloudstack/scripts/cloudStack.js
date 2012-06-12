@@ -18,25 +18,18 @@
       ],
       sections: {
         dashboard: {
-          title: 'Dashboard', content: function() {
-            var testText = 'Page ' + $('.panel').size();
-            var $button = $('<div>').html('Click ' + parseInt($('.panel').size() - 1));
-
-            $button.click(function() {
-              cloudStack._container.widgets.browser.addPanel({
-                title: testText,
-                isMaximized: true,
-                content: function($panel) {
-                  $panel.append(cloudStack.sections.dashboard.content);
-                }
-              });
-            });
-
-            return $button;
-          }
+          title: 'Dashboard', content: function() { return $('<div>').html('Dashboard'); }
         },
         instances: {
-          title: 'Instances', content: function() { return $('<div>').html('Instances'); }
+          title: 'Instances', content: function() {
+            var $list = $('<div>');
+            var list = cloudUI.widgets.list({
+              $list: $list,
+              id: 'instances'
+            });
+
+            return $list;
+          }
         },
         storage: {
           title: 'Storage', content: function() { return $('<div>').html('Storage'); }

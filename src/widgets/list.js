@@ -12,7 +12,7 @@
       var $table = $('<table>').addClass('body');
       var $tbody = $('<tbody>');
       var $emptyRow = $('<tr>').addClass('nocontents');
-      var $emptyCell = $('<td>');
+      var $emptyCell = $('<td>').html('<span>No contents</span>');
 
       return $table.append(
         $tbody.append(
@@ -26,10 +26,11 @@
       var $table = $('<table>').attr('nowrap', 'nowrap');
       var $thead = $('<thead>');
       var $tr = $('<tr>');
+      var $th = $('<th>').html('&nbsp;');
 
       return $fixedHeader.append(
         $table.append(
-          $thead.append($tr)
+          $thead.append($tr.append($th))
         )
       );
     }
