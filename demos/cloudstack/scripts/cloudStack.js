@@ -25,7 +25,14 @@
             var $list = $('<div>');
             var list = cloudUI.widgets.list({
               $list: $list,
-              id: 'instances'
+              id: 'instances',
+              fields: {
+                name: { label: 'Name' },
+                account: { label: 'Account' },
+                zone: { label: 'Zone' },
+                status: { label: 'Status' },
+                actions: { label: 'Actions' }
+              }
             });
 
             return $list;

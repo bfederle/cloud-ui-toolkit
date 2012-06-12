@@ -26,4 +26,22 @@
     equal($list.find('.data-table table.body tbody tr.nocontents td').size(), 1, 'Body table has empty table row');
     equal($list.find('.data-table table.body tbody tr.nocontents td').html(), '<span>No contents</span>', 'Empty contents notice displayed');
   });
+
+  test('Fields', function() {
+    var $list = $('<div>');
+    var list;
+
+    list = cloudUI.widgets.list({
+      $list: $list,
+      id: 'testList',
+      fields: {
+        fieldA: { label: 'fieldALabel' },
+        fieldB: { label: 'fieldBLabel' }
+      }
+    });
+
+    equal($list.find('.data-table .fixed-header table thead tr th').size(), 2, 'Header has correct field count');
+    equal($list.find('.data-table .fixed-header table thead tr th.fieldA').size(), 1, 'Header has field A');
+    equal($list.find('.data-table .fixed-header table thead tr th.fieldB').size(), 1, 'Header has field B');
+  });
 }(jQuery, cloudUI));
