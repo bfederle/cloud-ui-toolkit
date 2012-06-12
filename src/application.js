@@ -77,6 +77,7 @@
     browser.reset();
     browser.addPanel({
       content: function($panel) {
+        $panel.append($('<div>').addClass('toolbar'));
         return sectionContent ?
           sectionContent().appendTo($panel) :
           '';
