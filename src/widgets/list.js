@@ -14,7 +14,7 @@
       return $wrapper.append($fixedHeader, $bodyTable);
     },
 
-    // Single table row
+    // Single data row
     tableRow: function(args) {
       var fields = args.fields;
       var dataItem = args.dataItem;
@@ -34,18 +34,20 @@
       return $tr;
     },
 
+    // 'No contents' row
+    emptyRow: function() {
+      var $emptyRow = $('<tr>').addClass('nocontents');
+      var $emptyCell = $('<td>').html('<span>No contents</span>');
+
+      return $emptyRow.append($emptyCell);
+    },
+
     // Table body
     bodyTable: function() {
       var $table = $('<table>').addClass('body');
       var $tbody = $('<tbody>');
-      var $emptyRow = $('<tr>').addClass('nocontents');
-      var $emptyCell = $('<td>').html('<span>No contents</span>');
-
-      return $table.append(
-        $tbody.append(
-          $emptyRow.append($emptyCell)
-        )
-      );
+      
+      return $table.append($tbody);
     },
 
     // Header area
@@ -130,16 +132,22 @@
         success: function(args) {
           var data = args.data;
 
-          table.appendRows({
-            fields: fields,
-            data: data,
-            fieldOrder: fieldOrder,
-            $tbody: $list.find('tbody')
-          });
+          if (data.length) {
+            table.appendRows({
+              fields: fields,
+              data: data,
+              fieldOrder: fieldOrder,
+              $tbody: $list.find('tbody')
+            });
+          } else {
+            $list.find('tbody').append(elems.emptyRow());
+          }
         },
 
         error: function(args) {}
       });
+    } else {
+      $list.find('tbody').append(elems.emptyRow());
     }
 
     return list;

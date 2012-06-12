@@ -81,4 +81,26 @@
     equal($list.find('.data-table table.body tr:last td.fieldB').size(), 1, 'fieldA present on row 2');
     equal($list.find('.data-table table.body tr:last td.fieldB span').html(), 'fieldBData2', 'fieldA data present on row 2');
   });
+
+  test('Data provider: no contents', function() {
+    var $list = $('<div>');
+    var list;
+
+    list = cloudUI.widgets.list({
+      $list: $list,
+      id: 'testList',
+      fields: {
+        fieldA: { label: 'fieldALabel' },
+        fieldB: { label: 'fieldBLabel' }
+      },
+      dataProvider: function(args) {
+        args.response.success({
+          data: []
+        });
+      }
+    });
+
+    equal($list.find('.data-table table.body tbody tr.nocontents td').size(), 1, 'Body table has empty table row');
+    equal($list.find('.data-table table.body tbody tr.nocontents td').html(), '<span>No contents</span>', 'Empty contents notice displayed');
+  });
 }(jQuery, cloudUI));
