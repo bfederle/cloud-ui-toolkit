@@ -103,6 +103,8 @@
 
         $tr.appendTo($tbody);
       });
+
+      cloudUI.evenOdd($tbody.find('tr'));
     }
   };
 
