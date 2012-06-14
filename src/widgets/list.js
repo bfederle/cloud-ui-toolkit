@@ -83,12 +83,14 @@
 
   // Table list-related actions
   var table = {
-    // Append multiple rows to list
-    appendRows: function(args) {
+    // Add multiple rows to list
+    // -- defaults to append, unless prepend: true is set
+    addRows: function(args) {
       var fields = args.fields;
       var data = args.data;
       var fieldOrder = args.fieldOrder;
       var $tbody = args.$tbody;
+      var prepend = args.prepend;
 
       // Cleanup
       $tbody.find('tr.nocontents').remove();
@@ -101,7 +103,11 @@
           fieldOrder: fieldOrder
         });
 
-        $tr.appendTo($tbody);
+        if (prepend) {
+          $tr.prependTo($tbody);
+        } else {
+          $tr.appendTo($tbody);
+        }
       });
 
       cloudUI.evenOdd($tbody.find('tr'));
@@ -117,7 +123,34 @@
             return fieldID;
           }) : [];
     var dataProvider = args.dataProvider;
-    var list = {};
+    
+    var list = {
+      appendRows: function(args) {
+        var data = args.data;
+
+        table.addRows({
+          fields: fields,
+          data: data,
+          fieldOrder: fieldOrder,
+          $tbody: $list.find('tbody')
+        });
+        
+        return list;
+      },
+      prependRows: function(args) {
+        var data = args.data;
+
+        table.addRows({
+          prepend: true,
+          fields: fields,
+          data: data,
+          fieldOrder: fieldOrder,
+          $tbody: $list.find('tbody')
+        });
+        
+        return list;
+      }
+    };
 
     // Draw basic list layout
     $list.addClass('view list-view');
@@ -135,7 +168,7 @@
           var data = args.data;
 
           if (data.length) {
-            table.appendRows({
+            table.addRows({
               fields: fields,
               data: data,
               fieldOrder: fieldOrder,

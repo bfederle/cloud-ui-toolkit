@@ -23,7 +23,7 @@
         instances: {
           title: 'Instances', content: function() {
             var $list = $('<div>');
-            var list = cloudUI.widgets.list({
+            var list = window._list = cloudUI.widgets.list({
               $list: $list,
               id: 'instances',
               fields: {

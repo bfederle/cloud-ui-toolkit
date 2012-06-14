@@ -105,4 +105,48 @@
     equal($list.find('.data-table table.body tbody tr.nocontents td').size(), 1, 'Body table has empty table row');
     equal($list.find('.data-table table.body tbody tr.nocontents td').html(), '<span>No contents</span>', 'Empty contents notice displayed');
   });
+
+  test('Append and prepend rows', function() {
+    var $list = $('<div>');
+    var list = cloudUI.widgets.list({
+      $list: $list,
+      id: 'testList',
+      fields: {
+        fieldA: { label: 'fieldALabel' },
+        fieldB: { label: 'fieldBLabel' }
+      },
+      dataProvider: function(args) {
+        args.response.success({
+          data: []
+        });
+      }
+    });
+
+    // Test append single row
+    equal(list.appendRows({
+      data: [{ fieldA: 'fieldA1', fieldB: 'fieldB1' }]
+    }), list, 'Append single row');
+    equal($list.find('table.body tr').size(), 1, 'Table has 1 row');
+    equal($list.find('table.body tr td.fieldA span').html(), 'fieldA1', 'Field A has correct contents');
+    equal($list.find('table.body tr td.fieldB span').html(), 'fieldB1', 'Field B has correct contents');
+
+    // Test append multiple rows
+    equal(list.appendRows({
+      data: [
+        { fieldA: 'fieldA2', fieldB: 'fieldB2' },
+        { fieldA: 'fieldA3', fieldB: 'fieldB3' }
+      ]
+    }), list, 'Append multiple rows');
+    equal($list.find('table.body tr').size(), 3, 'Table has 3 rows');
+    equal($list.find('table.body tr:last td.fieldA span').html(), 'fieldA3', 'Field A has correct contents');
+    equal($list.find('table.body tr:last td.fieldB span').html(), 'fieldB3', 'Field B has correct contents');
+
+    // Test prepend row
+    equal(list.prependRows({
+      data: [{ fieldA: 'fieldA4', fieldB: 'fieldB4' }]
+    }), list, 'Prepend single row');
+    equal($list.find('table.body tr').size(), 4, 'Table has 4 rows');
+    equal($list.find('table.body tr:first td.fieldA span').html(), 'fieldA4', 'Field A has correct contents');
+    equal($list.find('table.body tr:first td.fieldB span').html(), 'fieldB4', 'Field B has correct contents');
+  });
 }(jQuery, cloudUI));
