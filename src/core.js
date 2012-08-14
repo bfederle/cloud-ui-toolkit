@@ -1,5 +1,5 @@
 (function($) {
-  var cloudUI = window.cloudUI = {
+  window.cloudUI = {
     // DOM data storage and retrieval
     // -- based on jQuery data handling
     data: function($elem) {
