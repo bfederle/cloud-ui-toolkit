@@ -3,10 +3,9 @@
   var elems = {
     container: function(args) {
       var $container = args.$container;
-      var container = args.container;
       var sections = args.sections;
-      var home = args.home;
       var events = args.events;
+      var container;
 
       // Make widget
       container = cloudUI.widgets.container({
@@ -94,7 +93,7 @@
     var $container = args.$container;
     var sections = args.sections;
     var home = args.home;
-    var application, container, browser;
+    var application, container;
 
     // Define return object
     application = {
@@ -115,28 +114,29 @@
     };
 
     // Create widgets
-    container = application.widgets.container = elems.container({
-      $container: $container,
-      container: container,
-      sections: sections,
-      home: home,
-      events: {
-        selectNavItem: function(args) {
-          var sectionID = args.navID;
-          var section = sections[sectionID];
+    $.extend(application.widgets, {
+      container: elems.container({
+        $container: $container,
+        sections: sections,
+        home: home,
+        events: {
+          selectNavItem: function(args) {
+            var sectionID = args.navID;
+            var section = sections[sectionID];
 
-          showSection({
-            application: application,
-            sectionID: sectionID,
-            section: section,
-            selectNavItem: false
-          });
+            showSection({
+              application: application,
+              sectionID: sectionID,
+              section: section,
+              selectNavItem: false
+            });
+          }
         }
-      }
-    });
-    browser = application.widgets.browser = elems.browser({
-      $container: $container,
-      application: application
+      }),
+      browser: elems.browser({
+        $container: $container,
+        application: application
+      })
     });
 
     // Create persistent data store

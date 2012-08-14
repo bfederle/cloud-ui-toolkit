@@ -11,10 +11,10 @@
         'events',
         'accounts',
         'domains',
-        'infrastructure',
+        'system',
         'projects',
-        'globalSettings',
-        'serviceOfferings'
+        'global-settings',
+        'configuration'
       ],
       sections: {
         dashboard: {
@@ -71,16 +71,16 @@
         domains: {
           title: 'Domains', content: function() { return $('<div>').html('Domains'); }
         },
-        infrastructure: {
+        system: {
           title: 'Infrastructure', content: function() { return $('<div>').html('Infrastructure'); }
         },
         projects: {
           title: 'Projects', content: function() { return $('<div>').html('Projects'); }
         },
-        serviceOfferings: {
+        'configuration': {
           title: 'Service Offerings', content: function() { return $('<div>').html('Service Offerings'); }
         },
-        globalSettings: {
+        'global-settings': {
           title: 'Global Settings', content: function() { return $('<div>').html('Global Settings'); }
         }
       }
