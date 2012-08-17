@@ -1,4 +1,4 @@
-(function($, cloudUI) {
+(function($, _, cloudUI) {
   var elems = {
     navigationItem: function(args) {
       var $li = $('<li>');
@@ -207,8 +207,8 @@
       var $navigation = args.$navigation;
       var $panels = panel.getAll($container);
 
-      $panels.each(function() {
-        var $thisPanel = $(this);
+      _.map($panels, function(thisPanel) {
+        var $thisPanel = $(thisPanel);
 
         panel.remove({
           $panel: $thisPanel,
@@ -254,8 +254,8 @@
       // Remove specified panels + navigation
       removePanelTotal = $removePanels.size();
       removePanelCurrent = 0;
-      $removePanels.each(function() {
-        var $thisPanel = $(this);
+      _.map($removePanels, function(thisPanel) {
+        var $thisPanel = $(thisPanel);
 
         panel.remove({
           $panel: $thisPanel,
@@ -497,4 +497,4 @@
       }
     }
   });
-}(jQuery, cloudUI));
+}(jQuery, _, cloudUI));

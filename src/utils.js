@@ -1,4 +1,4 @@
-(function($, cloudUI) {
+(function($, _, cloudUI) {
   // Add even/odd pattern as CSS class for specified elems
   cloudUI.evenOdd = function($elems) {
     var isEven = true;
@@ -6,8 +6,8 @@
     // Cleanup
     $elems.removeClass('even odd');
 
-    $elems.each(function() {
-      var $elem = $(this);
+    _.map($elems, function(elem) {
+      var $elem = $(elem);
       var type;
 
       if (isEven) {
@@ -23,4 +23,4 @@
 
     return $elems;
   };
-}(jQuery, cloudUI))
+}(jQuery, _, cloudUI));

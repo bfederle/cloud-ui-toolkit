@@ -1,4 +1,4 @@
-(function($, cloudUI) {
+(function($, _, cloudUI) {
   var elems = {
     // Main table wrapper
     table: function(args) {
@@ -21,7 +21,7 @@
       var $tr = $('<tr>');
       var fieldOrder = args.fieldOrder;
 
-      $(fieldOrder).map(function(index, fieldID) {
+      _.map(fieldOrder, function(fieldID) {
         var field = fields[fieldID];
         var $td = $('<td>');
         var $span = $('<span>');
@@ -61,7 +61,7 @@
 
       // Add fields
       if (fields) {
-        $(fieldOrder).map(function(index, fieldID) {
+        _.map(fieldOrder, function(fieldID) {
           var field = fields[fieldID];
           var $th = $('<th>');
 
@@ -96,7 +96,7 @@
       $tbody.find('tr.nocontents').remove();
 
       // Make rows
-      $(data).map(function(index, dataItem) {
+      _.map(data, function(dataItem) {
         var $tr = elems.tableRow({
           fields: fields,
           dataItem: dataItem,
@@ -118,10 +118,7 @@
     var $list = args.$list;
     var id = args.id;
     var fields = args.fields;
-    var fieldOrder = args.fields ?
-          $.map(fields, function(field, fieldID) {
-            return fieldID;
-          }) : [];
+    var fieldOrder = fields ? _.keys(fields) : [];
     var dataProvider = args.dataProvider;
     
     var list = {
@@ -187,4 +184,4 @@
 
     return list;
   };
-}(jQuery, cloudUI));
+}(jQuery, _, cloudUI));

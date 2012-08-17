@@ -1,4 +1,4 @@
-(function($, cloudUI) {
+(function($, _, cloudUI) {
   // UI elements
   var elems = {
     header: function() {
@@ -137,12 +137,10 @@
 
     if (navItems) {
       navDisplay = args.navigationDisplay ?
-        args.navigationDisplay() :
-        $.map(navItems, function(navItem, navID) {
-          return navID;
-        });
-      $(navDisplay).each(function() {
-        var navID = this.toString();
+        args.navigationDisplay() : _.keys(navItems);
+      
+      _.map(navDisplay, function(item) {
+        var navID = item.toString();
         var navItem = navItems[navID];
 
         navigation.addItem({
@@ -192,7 +190,7 @@
       }
     });
 
-    buildUI($.extend(args, {
+    buildUI(_.extend(args, {
       container: container,
       $container: $container
     }));
@@ -212,4 +210,4 @@
       }
     }
   });
-}(jQuery, cloudUI));
+}(jQuery, _, cloudUI));

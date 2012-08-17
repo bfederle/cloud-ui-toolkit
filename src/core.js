@@ -1,11 +1,11 @@
-(function($) {
-  window.cloudUI = {
+(function($, _) {
+  var cloudUI = window.cloudUI = {
     // DOM data storage and retrieval
     // -- based on jQuery data handling
     data: function($elem) {
       var cloudUI = $elem.data('cloudUI');
 
-      if (!$.isPlainObject(cloudUI)) {
+      if (!_.isObject(cloudUI)) {
         cloudUI = {};
         $elem.data('cloudUI', cloudUI);
       }
@@ -28,8 +28,8 @@
       handler: function(args) {
         var handlers = args;
 
-        $.each(handlers, function(id, handler) {
-          var events = $.map(handler, function(value, key) { return key; }).join(' ');
+        _.each(handlers, function(handler, id) {
+          var events = _.keys(handler).join(' ');
 
           $(document).bind(events, function(event) {
             var $target = $(event.target);
@@ -71,4 +71,4 @@
 
   // Holds widget factories
   cloudUI.widgets = {};
-}(jQuery));
+}(jQuery, _));

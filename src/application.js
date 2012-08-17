@@ -1,4 +1,4 @@
-(function($, cloudUI) {
+(function($, _, cloudUI) {
   // Build widget elements
   var elems = {
     container: function(args) {
@@ -15,7 +15,7 @@
       });
 
       // Make nav item map
-      $.each(sections, function(sectionID, section) {
+      _.each(sections, function(section, sectionID) {
         container.addNavItem({
           id: sectionID,
           navItem: {
@@ -114,7 +114,7 @@
     };
 
     // Create widgets
-    $.extend(application.widgets, {
+    _.extend(application.widgets, {
       container: elems.container({
         $container: $container,
         sections: sections,
@@ -140,7 +140,7 @@
     });
 
     // Create persistent data store
-    $.extend(cloudUI.data($container), {
+    _.extend(cloudUI.data($container), {
       application: {
         _application: application,
         home: home
@@ -164,4 +164,4 @@
       }
     }
   });
-}(jQuery, cloudUI));
+}(jQuery, _, cloudUI));
