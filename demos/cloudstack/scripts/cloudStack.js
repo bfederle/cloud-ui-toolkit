@@ -26,6 +26,7 @@
             var list = window._list = cloudUI.widgets.list({
               $list: $list,
               id: 'instances',
+              fieldDisplay: ['name', 'zone', 'account', 'status'],
               fields: {
                 name: { label: 'Name' },
                 account: { label: 'Account' },

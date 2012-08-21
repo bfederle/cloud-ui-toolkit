@@ -3,11 +3,11 @@
     // Main table wrapper
     table: function(args) {
       var fields = args.fields;
-      var fieldOrder = args.fieldOrder;
+      var fieldDisplay = args.fieldDisplay;
       var $wrapper = $('<div>').addClass('data-table');
       var $fixedHeader = elems.fixedHeader({
         fields: fields,
-        fieldOrder: fieldOrder
+        fieldDisplay: fieldDisplay
       });
       var $bodyTable = elems.bodyTable();
 
@@ -19,9 +19,9 @@
       var fields = args.fields;
       var dataItem = args.dataItem;
       var $tr = $('<tr>');
-      var fieldOrder = args.fieldOrder;
+      var fieldDisplay = args.fieldDisplay;
 
-      _.map(fieldOrder, function(fieldID) {
+      _.map(fieldDisplay, function(fieldID) {
         var field = fields[fieldID];
         var $td = $('<td>');
         var $span = $('<span>');
@@ -57,11 +57,11 @@
       var $table = $('<table>').attr('nowrap', 'nowrap');
       var $thead = $('<thead>');
       var $tr = $('<tr>');
-      var fieldOrder = args.fieldOrder;
+      var fieldDisplay = args.fieldDisplay;
 
       // Add fields
       if (fields) {
-        _.map(fieldOrder, function(fieldID) {
+        _.map(fieldDisplay, function(fieldID) {
           var field = fields[fieldID];
           var $th = $('<th>');
 
@@ -88,7 +88,7 @@
     addRows: function(args) {
       var fields = args.fields;
       var data = args.data;
-      var fieldOrder = args.fieldOrder;
+      var fieldDisplay = args.fieldDisplay;
       var $tbody = args.$tbody;
       var prepend = args.prepend;
 
@@ -100,7 +100,7 @@
         var $tr = elems.tableRow({
           fields: fields,
           dataItem: dataItem,
-          fieldOrder: fieldOrder
+          fieldDisplay: fieldDisplay
         });
 
         if (prepend) {
@@ -114,74 +114,85 @@
     }
   };
 
-  cloudUI.widgets.list = function(args) {
-    var $list = args.$list;
-    var id = args.id;
-    var fields = args.fields;
-    var fieldOrder = fields ? _.keys(fields) : [];
-    var dataProvider = args.dataProvider;
-    
-    var list = {
-      appendRows: function(args) {
+  // Get field order from args
+  var fieldDisplay = function(listArgs) {
+    var fields = listArgs.fields;
+    var fieldDisplay = listArgs.fieldDisplay;
+
+    return fieldDisplay ? fieldDisplay :
+      (fields ? _.keys(fields) : []); // if no order specified
+  };
+
+  cloudUI.widgets.list = cloudUI.widget({
+    methods: {
+      _init: function(list, listArgs) {
+        var $list = listArgs.$list;
+        var id = listArgs.id;
+        var fields = listArgs.fields;
+        var dataProvider = listArgs.dataProvider;
+
+        // Draw basic list layout
+        $list.addClass('view list-view');
+        $list.addClass(id);
+        $list.append(elems.table({
+          fields: fields,
+          fieldDisplay: fieldDisplay(listArgs)
+        }));
+
+        // Load data
+        if (dataProvider) {
+          cloudUI.dataProvider({
+            dataProvider: dataProvider,
+            success: function(args) {
+              var data = args.data;
+
+              if (data.length) {
+                table.addRows({
+                  fields: fields,
+                  data: data,
+                  fieldDisplay: fieldDisplay(listArgs),
+                  $tbody: $list.find('tbody')
+                });
+              } else {
+                $list.find('tbody').append(elems.emptyRow());
+              }
+            },
+
+            error: function(args) {}
+          });
+        } else {
+          $list.find('tbody').append(elems.emptyRow());
+        }
+      },
+      appendRows: function(list, listArgs, args) {
         var data = args.data;
+        var fields = listArgs.fields;
+        var $list = listArgs.$list;
 
         table.addRows({
           fields: fields,
           data: data,
-          fieldOrder: fieldOrder,
+          fieldDisplay: fieldDisplay(listArgs),
           $tbody: $list.find('tbody')
         });
         
         return list;
       },
-      prependRows: function(args) {
+      prependRows: function(list, listArgs, args) {
         var data = args.data;
+        var fields = listArgs.fields;
+        var $list = listArgs.$list;
 
         table.addRows({
           prepend: true,
           fields: fields,
           data: data,
-          fieldOrder: fieldOrder,
+          fieldDisplay: fieldDisplay(listArgs),
           $tbody: $list.find('tbody')
         });
         
         return list;
       }
-    };
-
-    // Draw basic list layout
-    $list.addClass('view list-view');
-    $list.addClass(id);
-    $list.append(elems.table({
-      fields: fields,
-      fieldOrder: fieldOrder
-    }));
-
-    // Load data
-    if (dataProvider) {
-      cloudUI.dataProvider({
-        dataProvider: dataProvider,
-        success: function(args) {
-          var data = args.data;
-
-          if (data.length) {
-            table.addRows({
-              fields: fields,
-              data: data,
-              fieldOrder: fieldOrder,
-              $tbody: $list.find('tbody')
-            });
-          } else {
-            $list.find('tbody').append(elems.emptyRow());
-          }
-        },
-
-        error: function(args) {}
-      });
-    } else {
-      $list.find('tbody').append(elems.emptyRow());
     }
-
-    return list;
-  };
+  });
 }(jQuery, _, cloudUI));
