@@ -90,6 +90,7 @@
   });
 
   test('Widget factory', function() {
+    var $testEventElem = $('<div>').addClass('test-event-item').appendTo('#qunit-fixture');
     var widget = cloudUI.widget({
       methods: {
         _init: function(widget, widgetArgs) {
@@ -98,6 +99,15 @@
           equal(widgetArgs.$container.size(), 1, 'widgetArgs has pased $container');
           equal(widgetArgs.testWidgetArg, 'test123', 'widgetArgs has passed test option');
           stop();
+
+          cloudUI.event.register({
+            $elem: $testEventElem,
+            id: 'test-event',
+            data: {
+              widgetArgs: widgetArgs,
+              testData: 'testData123'
+            }
+          });
         },
         testMethod: function(widget, widgetArgs, args) {
           start();
@@ -105,6 +115,17 @@
           equal(widgetArgs.$container.size(), 1, 'widgetArgs has pased $container');
           equal(widgetArgs.testWidgetArg, 'test123', 'widgetArgs has passed test option');
           equal(args.testArg, 'testArg123', 'args has passed option');
+          stop();
+        }
+      },
+      events: {
+        'test-event': {
+          click: function(args) {
+            start();
+            ok(true, 'Click event triggered');
+            equal(args.testData, 'testData123', 'Test data passed');
+            equal(args.widgetArgs.$container.size(), 1, 'Widget passed');
+          }
         }
       }
     });
@@ -116,5 +137,8 @@
     });
 
     testWidget.testMethod({ testArg: 'testArg123' });
+    
+    // Trigger test-event
+    $testEventElem.click();
   });
 }(jQuery, cloudUI));

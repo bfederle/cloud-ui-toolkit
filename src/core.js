@@ -72,6 +72,7 @@
   // Widget factory
   cloudUI.widget = function(args) {
     var methods = args.methods;
+    var events = args.events;
 
     return function(args) {
       var widgetArgs = args;
@@ -87,6 +88,12 @@
       });
 
       widget._init(widget, widgetArgs, args);
+
+
+      // Register event handling
+      if (events) {
+        cloudUI.event.handler(events);
+      }
 
       return widget;
     };
