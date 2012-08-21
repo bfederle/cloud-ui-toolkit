@@ -69,6 +69,29 @@
     });
   };
 
-  // Holds widget factories
+  // Widget factory
+  cloudUI.widget = function(args) {
+    var methods = args.methods;
+
+    return function(args) {
+      var widgetArgs = args;
+      var widget = {};
+
+      // Build method map
+      _.map(methods, function(method, methodID) {
+        widget[methodID] = function(args) {
+          methods[methodID](widget, widgetArgs, args);
+
+          return widget;
+        };
+      });
+
+      widget._init(widget, widgetArgs, args);
+
+      return widget;
+    };
+  };
+
+  // Holds standard widgets
   cloudUI.widgets = {};
 }(jQuery, _));

@@ -88,4 +88,33 @@
       error: function(args) {}
     });
   });
+
+  test('Widget factory', function() {
+    var widget = cloudUI.widget({
+      methods: {
+        _init: function(widget, widgetArgs) {
+          start();
+          ok(true, '_init called');
+          equal(widgetArgs.$container.size(), 1, 'widgetArgs has pased $container');
+          equal(widgetArgs.testWidgetArg, 'test123', 'widgetArgs has passed test option');
+          stop();
+        },
+        testMethod: function(widget, widgetArgs, args) {
+          start();
+          ok(true, '_init called');
+          equal(widgetArgs.$container.size(), 1, 'widgetArgs has pased $container');
+          equal(widgetArgs.testWidgetArg, 'test123', 'widgetArgs has passed test option');
+          equal(args.testArg, 'testArg123', 'args has passed option');
+        }
+      }
+    });
+
+    stop();
+    var testWidget = widget({
+      $container: $('<div>'),
+      testWidgetArg: 'test123'
+    });
+
+    testWidget.testMethod({ testArg: 'testArg123' });
+  });
 }(jQuery, cloudUI));
