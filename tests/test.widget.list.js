@@ -45,6 +45,26 @@
     equal($list.find('.data-table .fixed-header table thead tr th.fieldB').size(), 1, 'Header has field B');
   });
 
+  test('Field display', function() {
+    var $list = $('<div>');
+    var list;
+
+    list = cloudUI.widgets.list({
+      $list: $list,
+      id: 'testList',
+      fieldDisplay: ['fieldB', 'fieldA'],
+      fields: {
+        fieldA: { label: 'fieldALabel' },
+        fieldB: { label: 'fieldBLabel' },
+        fieldC: { label: 'fieldCLabel' }
+      }
+    });
+
+    equal($list.find('th').size(), 2, 'Header has correct field count');
+    ok($list.find('th:first').hasClass('fieldB'), 'First header is field A');
+    ok($list.find('th:last').hasClass('fieldA'), 'Last header is field B');
+  });
+
   test('Data provider', function() {
     var $list = $('<div>');
     var list;
@@ -148,5 +168,5 @@
     equal($list.find('table.body tr').size(), 4, 'Table has 4 rows');
     equal($list.find('table.body tr:first td.fieldA span').html(), 'fieldA4', 'Field A has correct contents');
     equal($list.find('table.body tr:first td.fieldB span').html(), 'fieldB4', 'Field B has correct contents');
-  });
+  });  
 }(jQuery, cloudUI));
