@@ -455,37 +455,36 @@
           duration: widgetArgs.panelSpeed
         });
       }
-    }
-  });
+    },
+    events: {
+      'browser-navigation-item': {
+        click: function(args) {
+          var browser = args.browser;
+          var $panel = args.$panel;
 
-  cloudUI.event.handler({
-    'browser-navigation-item': {
-      click: function(args) {
-        var browser = args.browser;
-        var $panel = args.$panel;
+          browser.selectPanel({ $panel: $panel });
+        },
+        mouseover: function(args) {
+          var browser = args.browser;
+          var $panel = args.$panel;
 
-        browser.selectPanel({ $panel: $panel });
-      },
-      mouseover: function(args) {
-        var browser = args.browser;
-        var $panel = args.$panel;
+          if ($panel.hasClass('focused')) return;
 
-        if ($panel.hasClass('focused')) return;
+          $panel.addClass('focused');
 
-        $panel.addClass('focused');
+          setTimeout(function() {
+            if ($panel.hasClass('focused')) {
+              browser.focusPanel({ $panel: $panel });
+            }
+          }, 700); // Delay until panel is focused
+        },
+        mouseout: function(args) {
+          var browser = args.browser;
+          var $panel = args.$panel;
 
-        setTimeout(function() {
-          if ($panel.hasClass('focused')) {
-            browser.focusPanel({ $panel: $panel });
-          }
-        }, 700); // Delay until panel is focused
-      },
-      mouseout: function(args) {
-        var browser = args.browser;
-        var $panel = args.$panel;
-
-        $panel.parent().find('.panel').removeClass('focused');
-        browser.defocusPanel();
+          $panel.parent().find('.panel').removeClass('focused');
+          browser.defocusPanel();
+        }
       }
     }
   });
