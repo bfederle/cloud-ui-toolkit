@@ -382,89 +382,81 @@
     $navigation.append($('<ul>'));
   };
 
-  cloudUI.widgets.browser = function(args) {
-    var $container = args.$container;
-    var $navigation = args.$navigation;
-    var panelSpeed = args.panelSpeed ? args.panelSpeed : 500; // The duration of panel slide-in/out
-
-    var browser = {
-      addPanel: function(args) {
-        panel.add({
+  cloudUI.widgets.browser = cloudUI.widget({
+    methods: {
+      _init: function(browser, widgetArgs) {
+        var $container = widgetArgs.$container;
+        var $navigation = widgetArgs.$navigation;
+        
+        makeNavigation({
           $container: $container,
           $navigation: $navigation,
+          browser: browser
+        });
+      },
+      addPanel: function(browser, widgetArgs, args) {
+        panel.add({
+          $container: widgetArgs.$container,
+          $navigation: widgetArgs.$navigation,
           browser: browser,
           content: args.content,
           title: args.title,
-          duration: panelSpeed,
+          duration: widgetArgs.panelSpeed,
           isMaximized: args.maximizeIfSelected ?
             args.maximizeIfSelected : args.isMaximized
         });
-
-        return browser;
       },
-      selectPanel: function(args) {
+      selectPanel: function(browser, widgetArgs, args) {
         var $panel = args.$panel;
         var index = args.index ? args.index - 1 : 0; // Index in options starts at 1
         var complete = args.complete;
 
         if (!$panel) {
           // Get panel from index
-          $panel = panel.getByIndex(index, $container);
+          $panel = panel.getByIndex(index, widgetArgs.$container);
         }
 
         panel.makeLast({
-          $container: $container,
-          $navigation: $navigation,
+          $container: widgetArgs.$container,
+          $navigation: widgetArgs.$navigation,
           $targetPanel: $panel,
           browser: browser,
           complete: complete,
-          duration: panelSpeed
+          duration: widgetArgs.panelSpeed
         });
-
-        return browser;
       },
-      reset: function() {
+      reset: function(browser, widgetArgs, args) {
         panel.removeAll({
-          $container: $container,
-          $navigation: $navigation
+          $container: widgetArgs.$container,
+          $navigation: widgetArgs.$navigation
         });
-
-        return browser;
       },
-      focusPanel: function(args) {
+      focusPanel: function(browser, widgetArgs, args) {
         var $panel = args.$panel;
         var index = args.index ? args.index - 1 : 0; // Index in options starts at 1
         var slideInDuration = args.slideInDuration;
 
         if (!$panel) {
           // Get panel from index
-          $panel = panel.getByIndex(index, $container);
+          $panel = panel.getByIndex(index, widgetArgs.$container);
         }
 
         panel.hideOthers({
           $panel: $panel,
-          $container: $container,
-          duration: panelSpeed
+          $container: widgetArgs.$container,
+          duration: widgetArgs.panelSpeed
         });
       },
 
       // Defocuses any currently focused panel
-      defocusPanel: function() {
+      defocusPanel: function(browser, widgetArgs, args) {
         panel.showAll({
-          $container: $container,
-          duration: panelSpeed
+          $container: widgetArgs.$container,
+          duration: widgetArgs.panelSpeed
         });
       }
-    };
-
-    makeNavigation({
-      $container: $container,
-      $navigation: $navigation,
-      browser: browser
-    });
-
-    return browser;
-  };
+    }
+  });
 
   cloudUI.event.handler({
     'browser-navigation-item': {
