@@ -52,12 +52,19 @@
           start();
           ok(true, 'Click event handled');
           ok(args.testData, 'Test data present');
+          stop();
+        },
+        customEvent: function(args) {
+          start();
+          ok(true, 'Custom event called');
+          ok(args.testData, 'Test data present');
         }
       }
     }), 'Event handler setup');
 
     stop();
     $elem.click();
+    $(document).trigger('customEvent', { $elem: $elem });
   });
 
   test('dataProvider handler', function() {

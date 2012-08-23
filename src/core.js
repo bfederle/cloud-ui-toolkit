@@ -31,9 +31,10 @@
         _.each(handlers, function(handler, id) {
           var events = _.keys(handler).join(' ');
 
-          $(document).bind(events, function(event) {
+          $(document).bind(events, function(event, eventData) {
             var $target = $(event.target);
-            var $eventTarget = $target.closest('[cs-event-id=' + id + ']');
+            var $eventTarget = eventData && eventData.$elem ?
+                  eventData.$elem : $target.closest('[cs-event-id=' + id + ']');
             var type = event.type;
             var data;
 
