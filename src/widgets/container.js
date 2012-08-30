@@ -2,14 +2,32 @@
   // UI elements
   var elems = {
     header: function() {
-      return $('<div>').attr('id', 'header');
+      var $header = $('<div>').attr('id', 'header');
+
+      cloudUI.event.register({
+        $elem: $header,
+        id: 'container-header'
+      });
+      
+      return $header;
     },
     logo: function() {
-      return $('<div>').addClass('logo');
+      var $logo = $('<div>').addClass('logo');
+      
+      cloudUI.event.register({
+        $elem: $logo,
+        id: 'container-logo'
+      });
+      
+      return $logo;
     },
     navigation: function() {
       var $navigation = $('<div>').attr('id', 'navigation');
 
+      cloudUI.event.register({
+        $elem: $navigation,
+        id: 'container-navigation'
+      });
       $navigation.append($('<ul>'));
 
       return $navigation;
@@ -43,7 +61,14 @@
 
     // Where the content is contained
     mainArea: function() {
-      return $('<div>').attr('id', 'main-area');
+      var $main = $('<div>').attr('id', 'main-area');
+
+      cloudUI.event.register({
+        $elem: $main,
+        id: 'container-main-area'
+      });
+      
+      return $main;
     }
   };
 

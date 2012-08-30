@@ -16,15 +16,15 @@
         }
       }
     });
-    var $header = $container.find('#header');
-    var $logo = $header.find('.logo');
-    var $navigation = $container.find('#navigation ul');
-    var $mainArea = $container.find('#main-area');
+    var $header = $container.find('#header[cs-event-id=container-header]');
+    var $logo = $header.find('.logo[cs-event-id=container-logo]');
+    var $navigation = $container.find('#navigation[cs-event-id=container-navigation] > ul');
+    var $mainArea = $container.find('#main-area[cs-event-id=container-main-area]');
     equal($header.size(), 1, 'Header present');
     equal($logo.size(), 1, 'Logo present');
     equal($navigation.size(), 1, 'Navigation present');
     equal($mainArea.size(), 1, 'Main area present');
-    ok($navigation.find('li.navItemA').size(), 'Nav item A has correct ID');
+    ok($navigation.find('li.navItemA[cs-event-id=container-navigation-item]').size(), 'Nav item A has correct ID');
     equal($navigation.find('li.navItemA > span.title').html(), 'navItemATitle', 'Nav item A has correct title');
     ok($navigation.find('li.navItemB').size(), 'Nav item B has correct ID');
     equal($navigation.find('li.navItemB > span.title').html(), 'navItemBTitle', 'Nav item B has correct title');
