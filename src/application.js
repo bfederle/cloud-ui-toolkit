@@ -84,13 +84,20 @@
 
     browser.reset();
     browser.addPanel({
+      title: sectionTitle,
       content: function($panel) {
         $panel.append($('<div>').addClass('toolbar'));
+
+        cloudUI.event.call('showSection', 'application-container', {
+          container: container,
+          $panel: $panel,
+          sectionID: sectionID,
+          section: args.section
+        });
+        
         return sectionContent ?
-          sectionContent().appendTo($panel) :
-          '';
-      },
-      title: sectionTitle
+          sectionContent().appendTo($panel) : '';
+      }
     });
 
     if (selectNavItem) {

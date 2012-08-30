@@ -144,6 +144,25 @@
       equal($app.find('#breadcrumbs li > span').html(), 'sectionATitle', 'Breadcrumb correct');
     };
     $app.find('#breadcrumbs > .home').click();
+
+    // application-container->showSection event
+    stop();
+    var testEvent = true;
+    cloudUI.event.handler({
+      'application-container': {
+        showSection: function(args) {
+          if (!testEvent) return;
+          
+          start();
+          ok(true, 'showSection called');
+          equal(args.sectionID, 'sectionA', 'sectionID passed');
+          ok($.isPlainObject(args.section), 'section passed');
+
+          testEvent = false;
+        }
+      }
+    });
+    app.showSection('sectionA');
   });
 
   test('Show content', function() {
