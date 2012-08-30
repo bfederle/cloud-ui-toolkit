@@ -64,7 +64,7 @@
 
     stop();
     $elem.click();
-    $(document).trigger('customEvent', { $elem: $elem });
+    cloudUI.event.call('customEvent', { $elem: $elem });
   });
 
   test('dataProvider handler', function() {

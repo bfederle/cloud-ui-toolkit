@@ -47,6 +47,9 @@
         });
 
         return true;
+      },
+      call: function(eventID, args) {
+        return $(document).trigger(eventID, args);
       }
     }
   };
