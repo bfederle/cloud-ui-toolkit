@@ -42,14 +42,27 @@
 
             data = $eventTarget.data('cloudUI').eventData;
 
-            return handler[type](data);
+            return handler[type](
+              eventData && eventData.options ?
+                _.extend(_.clone(data), eventData.options) : data
+            );
           });
         });
 
         return true;
       },
-      call: function(eventID, args) {
-        return $(document).trigger(eventID, args);
+      call: function(eventID, item, options) {
+        var eventArgs = {
+          $elem: _.isString(item) ?
+            $(document).find('[cs-event-id=' + item + ']') : // Is an event ID
+            item // Is a jQuery object
+        };
+
+        if (options) {
+          _.extend(eventArgs, { options: options });
+        }
+        
+        return $(document).trigger(eventID, eventArgs);
       }
     }
   };

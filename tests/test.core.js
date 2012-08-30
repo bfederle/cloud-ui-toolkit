@@ -54,17 +54,25 @@
           ok(args.testData, 'Test data present');
           stop();
         },
-        customEvent: function(args) {
+        customEventA: function(args) {
           start();
-          ok(true, 'Custom event called');
+          ok(true, 'Custom event A called');
           ok(args.testData, 'Test data present');
+          stop();
+        },
+        customEventB: function(args) {
+          start();
+          ok(true, 'Custom event B called');
+          ok(args.testData, 'Test data present');
+          ok(args.customData, 'Custom data present');
         }
       }
     }), 'Event handler setup');
 
     stop();
     $elem.click();
-    cloudUI.event.call('customEvent', { $elem: $elem });
+    cloudUI.event.call('customEventA', $elem);
+    cloudUI.event.call('customEventB', $elem, { customData: true });
   });
 
   test('dataProvider handler', function() {
