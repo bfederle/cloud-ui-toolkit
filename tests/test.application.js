@@ -34,7 +34,6 @@
     var $app = $('<div>').appendTo('#qunit-fixture');
     var app;
 
-    stop();
     cloudUI.widgets.container = function(args) {
       start();
       ok(true, 'Container widget called');
@@ -55,6 +54,7 @@
         }
       };
     };
+    stop();
     app = cloudUI.application({
       $container: $app,
       home: 'sectionA',
@@ -64,6 +64,7 @@
         }
       }
     });
+    ok($app.is('[cs-event-id=application-container]'), 'Application container is registered');
   });
 
   test('Browser widget', function() {

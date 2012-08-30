@@ -25,6 +25,15 @@
         });
       });
 
+      cloudUI.event.register({
+        $elem: $container,
+        id: 'application-container',
+        data: {
+          container: container,
+          $container: $container
+        }
+      });
+
       return container;
     },
     browser: function(args) {
