@@ -171,6 +171,7 @@
 
     stop();
 
+    // Test with content: function() {}
     app = cloudUI.application({
       $container: $app,
       home: 'testSection',
@@ -186,7 +187,26 @@
         }
       }
     });
-
     equal($app.find('#browser .container .panel > div.testSectionContent').size(), 1, 'Content rendered');
+
+    // [legacy] Test with custom: function() {}
+    $app.remove();
+    $app = $('<div>').appendTo('#qunit-fixture');
+    app = cloudUI.application({
+      $container: $app,
+      home: 'testSection',
+      sections: {
+        testSection: {
+          title: 'testSectionTitle',
+          custom: function() {
+            start();
+            ok(true, 'content called');
+
+            return $('<div>').addClass('testSectionContent');
+          }
+        }
+      }
+    });
+    equal($app.find('#browser .container .panel > div.testSectionContent').size(), 1, 'Content rendered');    
   });
 }(jQuery, cloudUI));

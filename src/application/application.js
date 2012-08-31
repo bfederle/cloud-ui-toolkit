@@ -79,7 +79,7 @@
     var container = args.application.widgets.container;
     var sectionID = args.sectionID;
     var sectionTitle = args.section.title;
-    var sectionContent = args.section.content;
+    var sectionContent = cloudUI.which(args.section, ['content', 'custom']);
     var selectNavItem = args.selectNavItem;
 
     browser.reset();
