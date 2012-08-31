@@ -39,7 +39,7 @@
     
     equal($app.find('#browser .container .list-view[cs-event-id=application-list]').size(), 1, 'List present in browser');
 
-    // Test with listView: {}
+    // [legacy] Test with listView: {}
     $app.remove();
     $app = $('<div>').appendTo('#qunit-fixture');
     app = cloudUI.application({
