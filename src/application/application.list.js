@@ -3,7 +3,9 @@
     'application-container': {
       showSection: function(args) {
         var section = args.section;
-        var listArgs = args.section.list;
+        var listArgs = cloudUI.which(args.section, [
+          'list', 'listView'
+        ]);
         var $list, list;
         
         if (!listArgs) return;
