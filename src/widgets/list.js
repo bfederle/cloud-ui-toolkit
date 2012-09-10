@@ -26,10 +26,32 @@
         var $td = $('<td>');
         var $span = $('<span>');
 
+        cloudUI.event.register({
+          id: 'list-table-item',
+          $elem: $td,
+          data: {
+            $td: $td,
+            fieldID: fieldID,
+            field: field
+          }
+        });
+
         $td.addClass(fieldID);
         $span.html(dataItem[fieldID]).appendTo($td);
         $td.appendTo($tr);
       });
+
+      cloudUI.event.register({
+        id: 'list-table-row',
+        $elem: $tr,
+        data: {
+          $td: $tr,
+          fields: fields
+        }
+      });
+
+      $tr.find('td:first').addClass('first');
+      $tr.find('td:last').addClass('last');
 
       return $tr;
     },

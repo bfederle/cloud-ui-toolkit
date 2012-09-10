@@ -90,16 +90,16 @@
     equal($list.find('.data-table table.body tr:first td').size(), 2, '<td> count matches header count');
 
     // Row 1
-    equal($list.find('.data-table table.body tr:first td.fieldA').size(), 1, 'fieldA present on row 1');
+    equal($list.find('.data-table table.body tr:first td.fieldA.first').size(), 1, 'fieldA present on row 1');
     equal($list.find('.data-table table.body tr:first td.fieldA span').html(), 'fieldAData1', 'fieldA data present on row 1');
-    equal($list.find('.data-table table.body tr:first td.fieldB').size(), 1, 'fieldA present on row 1');
+    equal($list.find('.data-table table.body tr:first td.fieldB.last').size(), 1, 'fieldA present on row 1');
     equal($list.find('.data-table table.body tr:first td.fieldB span').html(), 'fieldBData1', 'fieldA data present on row 1');
     ok($list.find('.data-table table.body tr:first').hasClass('even'), 'row 2 is even');
 
     // Row 2
-    equal($list.find('.data-table table.body tr:last td.fieldA').size(), 1, 'fieldA present on row 2');
+    equal($list.find('.data-table table.body tr:last td.fieldA.first').size(), 1, 'fieldA present on row 2');
     equal($list.find('.data-table table.body tr:last td.fieldA span').html(), 'fieldAData2', 'fieldA data present on row 2');
-    equal($list.find('.data-table table.body tr:last td.fieldB').size(), 1, 'fieldA present on row 2');
+    equal($list.find('.data-table table.body tr:last td.fieldB.last').size(), 1, 'fieldA present on row 2');
     equal($list.find('.data-table table.body tr:last td.fieldB span').html(), 'fieldBData2', 'fieldA data present on row 2');
     ok($list.find('.data-table table.body tr:last').hasClass('odd'), 'row 2 is odd');
   });
