@@ -39,7 +39,8 @@
             var type = event.type;
             var data;
 
-            if (!$eventTarget.size()) return true;
+            if (!$eventTarget.size() ||
+                $eventTarget.attr('cs-event-id') != id) return true;
 
             data = $eventTarget.data('cloudUI').eventData;
 
