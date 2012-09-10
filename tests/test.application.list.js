@@ -5,24 +5,6 @@
     var $app = $('<div>').appendTo('#qunit-fixture');
     var app;
     
-    stop();
-    // application-list->init event
-    var testEvent = true;
-    cloudUI.event.handler({
-      'application-list': {
-        init: function(args) {
-          if (!testEvent) return;
-          
-          start();
-          ok(true, 'init called');
-          ok($.isPlainObject(args.section), 'section passed');
-          ok($.isPlainObject(args.listArgs), 'listArgs passed');
-
-          testEvent = false;
-        }
-      }
-    });
-
     // Test with list: {}
     app = cloudUI.application({
       $container: $app,

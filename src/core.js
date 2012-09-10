@@ -22,6 +22,7 @@
 
         $elem.attr('cs-event-id', id);
         cloudUI.data($elem).eventData = data;
+        cloudUI.event.call('init', $elem);
 
         return $elem;
       },
@@ -61,7 +62,7 @@
         if (options) {
           _.extend(eventArgs, { options: options });
         }
-        
+
         return $(document).trigger(eventID, eventArgs);
       }
     }

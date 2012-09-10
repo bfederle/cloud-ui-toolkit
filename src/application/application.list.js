@@ -28,7 +28,6 @@
             listArgs: listArgs
           }
         });
-        cloudUI.event.call('init', $list);
 
         $list.appendTo(args.$panel);
       }

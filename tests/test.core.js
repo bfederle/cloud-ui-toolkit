@@ -24,6 +24,23 @@
   test('Register event', function() {
     var $elem = $('<div>');
 
+    // Test init event
+    var testEvent = true;
+    stop();
+    cloudUI.event.handler({
+      'test-event': {
+        init: function(args) {
+          if (!testEvent) return;
+          
+          start();
+          ok(true, 'init called');
+          ok(args.testData, 'testData passed');
+
+          testEvent = false;
+        }
+      }
+    });
+    
     ok(cloudUI.event.register({
       $elem: $elem,
       id: 'test-event',
