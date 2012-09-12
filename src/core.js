@@ -74,9 +74,10 @@
     var dataProvider = args.dataProvider;
     var success = args.success;
     var error = args.error;
+    var context = cloudUI.context(args.context);
 
     dataProvider({
-      context: [],
+      context: context,
       response: {
         success: function(args) {
           success(args);
@@ -86,6 +87,30 @@
         }
       }
     });
+  };
+
+  // Handles context objects, so they are passed in a standard format
+  cloudUI.context = function(context, args) {
+    var newContext = _.clone(context ? context : {});
+    var id, data, contextItem;
+
+    if (args) {
+      id = args.id;
+      data = args.data;
+      contextItem = newContext[id] ?
+        newContext[id] : [];
+      
+      if (_.isArray(data)) {
+        // Merge given data set with existing list
+        newContext[id] = _.flatten([contextItem, data]);
+      } else {
+        // Is an object, just push into existing list
+        contextItem.push(data);
+        newContext[id] = contextItem;
+      }
+    }
+
+    return newContext;
   };
 
   // Widget factory

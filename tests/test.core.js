@@ -97,7 +97,7 @@
       start();
 
       ok(true, 'Data provider called');
-      ok($.isArray(args.context), 'Context passed');
+      ok(_.isObject(args.context), 'Context passed');
       ok(args.response.success, 'Success callback passed');
       ok(args.response.error, 'Error callback passed');
 
@@ -119,6 +119,64 @@
       },
       error: function(args) {}
     });
+  });
+
+  test('Context', function() {
+    // Test new context
+    var context;
+
+    context = cloudUI.context(context);
+
+    ok(_.isObject(context), 'Context created new object');
+
+    // Test append existing context, with object
+    context = {
+      instances: [
+        { id: 'instance1' }
+      ]
+    };
+    context = cloudUI.context(context, {
+      id: 'storage',
+      data: {
+        id: 'storage1'
+      }
+    });
+
+    equal(context.storage[0].id, 'storage1', 'New context item value present');
+
+    // Test append existing item, with object
+    context = {
+      instances: [
+        { id: 'instance1' }
+      ]
+    };
+    context = cloudUI.context(context, {
+      id: 'instances',
+      data: {
+        id: 'instance2'
+      }
+    });
+    equal(context.instances.length, 2, 'Instances have correct length');
+    equal(context.instances[0].id, 'instance1', 'instance1 present');
+    equal(context.instances[1].id, 'instance2', 'instance2 present');
+
+    // Test append existing item, with array
+    context = {
+      instances: [
+        { id: 'instance1' }
+      ]
+    };
+    context = cloudUI.context(context, {
+      id: 'instances',
+      data: [
+        { id: 'instance2' },
+        { id: 'instance3' }
+      ]
+    });
+    equal(context.instances.length, 3, 'Instances have correct length');
+    equal(context.instances[0].id, 'instance1', 'instance1 present');
+    equal(context.instances[1].id, 'instance2', 'instance2 present');
+    equal(context.instances[2].id, 'instance3', 'instance3 present');
   });
 
   test('Widget factory', function() {
