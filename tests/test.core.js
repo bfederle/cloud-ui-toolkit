@@ -148,6 +148,9 @@
           equal(widgetArgs.testWidgetArg, 'test123', 'widgetArgs has passed test option');
           equal(args.testArg, 'testArg123', 'args has passed option');
           stop();
+        },
+        testMethodWithReturn: function() {
+          return 'return123';
         }
       },
       events: {
@@ -172,5 +175,8 @@
     
     // Trigger test-event
     $testEventElem.click();
+
+    // Test method with return
+    equal(testWidget.testMethodWithReturn(), 'return123', 'testMethodWithReturn value returned');
   });
 }(jQuery, cloudUI));

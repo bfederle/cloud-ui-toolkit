@@ -100,9 +100,9 @@
       // Build method map
       _.map(methods, function(method, methodID) {
         widget[methodID] = function(args) {
-          methods[methodID](widget, widgetArgs, args);
+          var method = methods[methodID](widget, widgetArgs, args);
 
-          return widget;
+          return method ? method : widget;
         };
       });
 
