@@ -5,6 +5,7 @@
       var $container = args.$container;
       var sections = args.sections;
       var events = args.events;
+      var application = args.application;
       var container;
 
       // Make widget
@@ -29,6 +30,7 @@
         $elem: $container,
         id: 'application-container',
         data: {
+          application: application,
           container: container,
           $container: $container
         }
@@ -133,6 +135,7 @@
     _.extend(application.widgets, {
       container: elems.container({
         $container: $container,
+        application: application,
         sections: sections,
         home: home,
         events: {
