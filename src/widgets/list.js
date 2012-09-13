@@ -2,6 +2,7 @@
   var elems = {
     // Main table wrapper
     table: function(args) {
+      var list = args.list;
       var fields = args.fields;
       var fieldDisplay = args.fieldDisplay;
       var $wrapper = $('<div>').addClass('data-table');
@@ -16,10 +17,15 @@
 
     // Single data row
     tableRow: function(args) {
+      var list = args.list;
+      var listArgs = args.listArgs;
       var fields = args.fields;
       var dataItem = args.dataItem;
       var $tr = $('<tr>');
       var fieldDisplay = args.fieldDisplay;
+
+      // Store data in row
+      cloudUI.data($tr).jsonObj = dataItem;
 
       _.map(fieldDisplay, function(fieldID) {
         var field = fields[fieldID];
@@ -32,7 +38,9 @@
           data: {
             $td: $td,
             fieldID: fieldID,
-            field: field
+            field: field,
+            list: list,
+            listArgs: listArgs
           }
         });
 
@@ -46,7 +54,9 @@
         $elem: $tr,
         data: {
           $td: $tr,
-          fields: fields
+          fields: fields,
+          list: list,
+          listArgs: listArgs
         }
       });
 
@@ -108,6 +118,8 @@
     // Add multiple rows to list
     // -- defaults to append, unless prepend: true is set
     addRows: function(args) {
+      var list = args.list;
+      var listArgs = args.listArgs;
       var fields = args.fields;
       var data = args.data;
       var fieldDisplay = args.fieldDisplay;
@@ -120,6 +132,8 @@
       // Make rows
       _.map(data, function(dataItem) {
         var $tr = elems.tableRow({
+          list: list,
+          listArgs: listArgs,
           fields: fields,
           dataItem: dataItem,
           fieldDisplay: fieldDisplay
@@ -157,6 +171,7 @@
         $list.addClass('view list-view');
         $list.addClass(id);
         $list.append(elems.table({
+          list: list,
           fields: fields,
           fieldDisplay: fieldDisplay(listArgs)
         }));
@@ -170,6 +185,8 @@
 
               if (data.length) {
                 table.addRows({
+                  list: list,
+                  listArgs: listArgs,
                   fields: fields,
                   data: data,
                   fieldDisplay: fieldDisplay(listArgs),
@@ -186,34 +203,43 @@
           $list.find('tbody').append(elems.emptyRow());
         }
       },
+
+      // Append rows at bottom of table
       appendRows: function(list, listArgs, args) {
         var data = args.data;
         var fields = listArgs.fields;
         var $list = listArgs.$list;
 
         table.addRows({
+          list: list,
+          listArgs: listArgs,
           fields: fields,
           data: data,
           fieldDisplay: fieldDisplay(listArgs),
           $tbody: $list.find('tbody')
         });
-        
-        return list;
       },
+
+      // Prepend rows at the top of table
       prependRows: function(list, listArgs, args) {
         var data = args.data;
         var fields = listArgs.fields;
         var $list = listArgs.$list;
 
         table.addRows({
+          list: list,
+          listArgs: listArgs,
           prepend: true,
           fields: fields,
           data: data,
           fieldDisplay: fieldDisplay(listArgs),
           $tbody: $list.find('tbody')
         });
-        
-        return list;
+      },
+
+      // Return JSON object stored in specified list row
+      getItemData: function(list, listArgs, $tr) {
+        return cloudUI.data($tr).jsonObj;
       }
     }
   });
