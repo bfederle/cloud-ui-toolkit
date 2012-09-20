@@ -43,6 +43,13 @@
               action: function(args) {
                 args.response.success();
               }
+            },
+
+            destroy: {
+              label: 'Destroy VM',
+              action: function(args) {
+                args.response.success();
+              }
             }
           },
 
