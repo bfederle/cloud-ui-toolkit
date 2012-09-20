@@ -14,11 +14,13 @@
 
         // Initialize list view
         $list = $('<div>');
+        $list.appendTo(args.$panel);
         list = cloudUI.widgets.list(
           _.extend(_.clone(listArgs), {
             $list: $list,
             application: application,
-            section: section
+            section: section,
+            actions: section.actions
           })
         );
 
@@ -32,8 +34,6 @@
             listArgs: listArgs
           }
         });
-
-        $list.appendTo(args.$panel);
       }
     }
   });
