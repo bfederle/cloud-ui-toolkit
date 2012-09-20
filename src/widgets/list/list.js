@@ -1,18 +1,50 @@
 (function($, _, cloudUI) {
+  var resizeHeaders = function($table) {
+    var $thead = $table.closest('div.data-table').find('thead');
+    var $tbody = $table.find('tbody');
+    var $ths = $thead.find('th');
+    var $tds = $tbody.find('tr:first td');
+
+    if ($ths.size() > $tds.size()) {
+      $ths.width(
+        $table.width() / $ths.size()
+      );
+      return false;
+    }
+
+    $ths.each(function() {
+      var $th = $(this);
+      var $td = $tds.filter(function() {
+        return $(this).index() == $th.index();
+      });
+
+      $th.width($td.width());
+
+      return true;
+    });
+
+    return $ths;
+  };
+
   var elems = {
     // Main table wrapper
     table: function(args) {
       var list = args.list;
+      var listArgs = args.listArgs;
       var fields = args.fields;
       var fieldDisplay = args.fieldDisplay;
       var $wrapper = $('<div>').addClass('data-table');
       var $fixedHeader = elems.fixedHeader({
+        list: list,
+        listArgs: listArgs,
         fields: fields,
         fieldDisplay: fieldDisplay
       });
       var $bodyTable = elems.bodyTable();
 
-      return $wrapper.append($fixedHeader, $bodyTable);
+      $wrapper.append($fixedHeader, $bodyTable);
+
+      return $wrapper;
     },
 
     // Single data row
@@ -84,6 +116,8 @@
 
     // Header area
     fixedHeader: function(args) {
+      var list = args.list;
+      var listArgs = args.listArgs;
       var fields = args.fields;
       var $fixedHeader = $('<div>').addClass('fixed-header');
       var $table = $('<table>').attr('nowrap', 'nowrap');
@@ -104,6 +138,18 @@
       } else {
         $tr.append('<th>&nbsp;</th>');
       }
+
+      cloudUI.event.register({
+        id: 'list-table-header-row',
+        $elem: $tr,
+        data: {
+          $header: $fixedHeader,
+          $tr: $tr,
+          fields: fields,
+          list: list,
+          listArgs: listArgs
+        }
+      });
 
       return $fixedHeader.append(
         $table.append(
@@ -172,6 +218,7 @@
         $list.addClass(id);
         $list.append(elems.table({
           list: list,
+          listArgs: listArgs,
           fields: fields,
           fieldDisplay: fieldDisplay(listArgs)
         }));
@@ -192,6 +239,8 @@
                   fieldDisplay: fieldDisplay(listArgs),
                   $tbody: $list.find('tbody')
                 });
+
+                resizeHeaders($list.find('table'));
               } else {
                 $list.find('tbody').append(elems.emptyRow());
               }
