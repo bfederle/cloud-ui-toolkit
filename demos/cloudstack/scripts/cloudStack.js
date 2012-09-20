@@ -69,7 +69,9 @@
                 });
               }
 
-              args.response.success({ data: data });
+              setTimeout(function() {
+                args.response.success({ data: data });
+              });
             }
           },
 
