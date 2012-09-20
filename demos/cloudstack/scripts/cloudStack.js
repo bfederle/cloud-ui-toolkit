@@ -22,10 +22,35 @@
         instances: {
           title: 'Instances',
 
+          // Actions
+          actions: {
+            start: {
+              label: 'Start VM',
+              action: function(args) {
+                args.response.success();
+              }
+            },
+
+            stop: {
+              label: 'Stop VM',
+              action: function(args) {
+                args.response.success();
+              }
+            },
+
+            restart: {
+              label: 'Restart VM',
+              action: function(args) {
+                args.response.success();
+              }
+            }
+          },
+
           // List view
           list: {
             id: 'instances',
             fieldDisplay: ['name', 'zone', 'account', 'status'],
+            actionDisplay: ['start', 'stop', 'restart'],
             fields: {
               name: { label: 'Name' },
               account: { label: 'Account' },

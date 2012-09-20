@@ -53,7 +53,7 @@
         id: 'list-table-row',
         $elem: $tr,
         data: {
-          $td: $tr,
+          $tr: $tr,
           fields: fields,
           list: list,
           listArgs: listArgs
