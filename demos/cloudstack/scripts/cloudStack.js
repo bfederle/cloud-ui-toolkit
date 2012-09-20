@@ -62,7 +62,15 @@
               name: { label: 'Name' },
               account: { label: 'Account' },
               zone: { label: 'Zone' },
-              status: { label: 'Status' }
+              status: {
+                label: 'Status',
+                indicator: {
+                  'Running': 'on',
+                  'Stopped': 'off',
+                  'Destroyed': 'off',
+                  'Error': 'off'
+                }
+              }
             },
             dataProvider: function(args) {
               var data = [];
@@ -72,13 +80,13 @@
                   name: 'i-' + i + '-VM',
                   account: 'brian',
                   zone: 'Zone 1',
-                  status: 'Enabled'
+                  status: 'Running'
                 });
               }
 
               setTimeout(function() {
                 args.response.success({ data: data });
-              });
+              }, 100);
             }
           },
 
