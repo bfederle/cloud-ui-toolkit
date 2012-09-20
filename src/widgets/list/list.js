@@ -72,7 +72,8 @@
             fieldID: fieldID,
             field: field,
             list: list,
-            listArgs: listArgs
+            listArgs: listArgs,
+            dataItem: dataItem
           }
         });
 
