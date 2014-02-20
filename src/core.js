@@ -18,8 +18,9 @@
       register: function(args) {
         var $elem = args.$elem;
         var id = args.id;
-        var data = args.data;
+        var data = args.data ? _.clone(args.data) : {};
 
+        data._$elem = $elem;
         $elem.attr('cs-event-id', id);
         cloudUI.data($elem).eventData = data;
         cloudUI.event.call('init', $elem);

@@ -34,6 +34,7 @@
           
           start();
           ok(true, 'init called');
+          equal(args._$elem.size(), 1, 'Default _$elem passed');
           ok(args.testData, 'testData passed');
 
           testEvent = false;
